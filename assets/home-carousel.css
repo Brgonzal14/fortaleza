@@ -1,0 +1,118 @@
+/* ====== Fort — Carousel portada (Adaptado para Astra) ====== */
+:root{
+  --accent: #7c5cff;
+  --bg: #0b0b0c;
+  --txt: #f5f5f7;
+}
+
+/* ASTRA: ELIMINADO
+   Las reglas para '.home .site-content .col-full' y '.home .content-area'
+   eran específicas para Storefront y ya no son necesarias.
+   El ancho completo se gestiona desde los ajustes de la página.
+*/
+
+/* Contenedor del carrusel */
+.fort-carousel{
+  position: relative;
+  /* ASTRA: SIMPLIFICADO - Ya no se necesita el hack de 100vw y margin-left */
+  width: 100%;
+  background: #000;
+  height: clamp(460px, 75vh, 820px);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Pila de slides */
+.fort-carousel .slides{ position: absolute; inset: 0; }
+
+/* Un slide */
+.fort-carousel .slide{
+  position:absolute; inset:0;
+  opacity:0; visibility:hidden;
+  transition:opacity .6s ease;
+}
+.fort-carousel .slide.is-active{ opacity:1; visibility:visible; z-index:1; }
+
+.fort-carousel .slide img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter: contrast(1.02) saturate(1.02);
+}
+
+/* Capa de contenido */
+.fort-carousel .slide-content{
+  position:absolute;
+  left: clamp(20px, 6vw, 120px);
+  bottom: clamp(60px, 14vh, 200px);
+  max-width: min(720px, 86vw);
+  color:#fff;
+  text-shadow: 0 10px 28px rgba(0,0,0,.35), 0 6px 16px rgba(0,0,0,.45);
+}
+.fort-carousel .slide-content.center{ left: clamp(20px, 6vw, 120px); }
+
+.fort-carousel .slide-content h2{
+  margin:0 0 8px 0;
+  font-weight:800;
+  line-height:1.02;
+  font-size: clamp(28px, 6.2vw, 64px);
+}
+.fort-carousel .slide-content .subline{
+  font-weight:800; display:inline-block;
+}
+.fort-carousel .slide-content p{
+  margin:.4rem 0 1.2rem; font-size: clamp(14px, 1.8vw, 20px);
+  color:#e8e8ef;
+}
+
+/* Botón */
+.fort-carousel .btn{
+  display:inline-block; padding:.9rem 1.4rem;
+  border-radius: 999px; text-decoration:none;
+}
+.fort-carousel .btn.primary{
+  background:var(--accent); color:#fff; font-weight:700;
+  box-shadow:0 10px 26px rgba(124,92,255,.28);
+}
+.fort-carousel .btn.primary:hover{ filter:brightness(1.05); }
+
+/* Flechas */
+.fort-carousel .nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:64px; height:44px; border-radius:999px;
+  background: rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.25);
+  color:#fff; font-size:22px; line-height:1;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  cursor:pointer;
+  z-index: 8;
+}
+.fort-carousel .nav:hover{ background: rgba(255,255,255,.18); }
+.fort-carousel .nav:focus-visible{ outline:2px solid #fff; outline-offset:2px; }
+.fort-carousel .nav.prev{ left: clamp(12px, 3vw, 28px); }
+.fort-carousel .nav.next{ right: clamp(12px, 3vw, 28px); }
+
+
+/* Dots */
+.fort-carousel .dots{
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom:18px; display:flex; gap:10px;
+  z-index: 9;
+}
+.fort-carousel .dots button{
+  width:28px; height:12px; border-radius:999px;
+  background: rgba(255,255,255,.35);
+  border:0; cursor:pointer;
+}
+.fort-carousel .dots button[aria-current="true"]{ background:#fff; }
+/* La regla [aria-selected="true"] es redundante si usas [aria-current="true"], se puede omitir */
+
+
+/* Respeta reduce motion */
+@media (prefers-reduced-motion:reduce){
+  .fort-carousel .slide{ transition:none !important; }
+}
+
+/* Altura algo menor en móvil para no tapar tanto */
+@media (max-width:600px){
+  .fort-carousel{ height: clamp(380px, 58vh, 520px); }
+  .fort-carousel .slide-content{ bottom: clamp(32px, 10vh, 120px); }
+}
