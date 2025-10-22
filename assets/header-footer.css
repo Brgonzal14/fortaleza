@@ -1244,3 +1244,129 @@ body.woocommerce-cart .site-content > .ast-container{
   }
   .woocommerce-cart td.product-quantity .quantity{ min-width: 0; }
 }
+
+/* ===== Checkout — 2 columnas compactas tipo card ===== */
+
+/* Contenedor general del checkout */
+body.woocommerce-checkout .site-content > .ast-container{
+  max-width: var(--container-max, 1240px) !important;
+  padding-inline: var(--container-px, 16px) !important;
+  margin: 0 auto !important;
+}
+
+/* Grid: izquierda (formulario) | derecha (resumen) */
+.woocommerce-checkout .woocommerce{
+  max-width: 1100px;                 /* ← ancho total prudente */
+  margin: 24px auto 56px;
+}
+.woocommerce-checkout form.checkout{
+  display: grid !important;
+  grid-template-columns: minmax(560px, 1fr) 360px !important;
+  gap: 28px !important;
+  align-items: start;
+}
+
+/* Izquierda (datos del cliente) como card */
+.woocommerce-checkout #customer_details{
+  background: #141416;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+/* Títulos y espaciados más contenidos */
+.woocommerce-checkout #customer_details h3{
+  font-size: 1.1rem;
+  margin: 6px 0 10px;
+}
+.woocommerce form .form-row{
+  margin: 0 0 12px;                  /* menos separación entre campos */
+}
+
+/* Inputs/selects compactos y redondeados */
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea,
+.woocommerce form .form-row select{
+  height: 42px;
+  border-radius: 12px;
+  font-size: .95rem;
+}
+
+/* Select2 (país/región) al mismo alto */
+.select2-container--default .select2-selection--single{
+  height: 42px !important; border-radius: 12px !important;
+  background: #0f0f11; border-color: rgba(255,255,255,.12);
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height: 42px !important; padding-left: 12px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+  height: 42px !important;
+}
+
+/* Columna derecha (resumen) como card + sticky */
+.woocommerce-checkout #order_review{
+  background: #141416;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  padding: 16px;
+  position: sticky; top: 96px;       /* se mantiene visible al hacer scroll */
+}
+
+/* Tabla del resumen sin fondos blancos */
+.woocommerce-checkout #order_review .shop_table,
+.woocommerce-checkout #order_review .shop_table th,
+.woocommerce-checkout #order_review .shop_table td{
+  background: transparent !important;
+  border-color: rgba(255,255,255,.10) !important;
+}
+.woocommerce-checkout #order_review_heading{
+  font-size: 1.1rem; margin: 0 0 10px;
+}
+
+/* Botón de “Realizar pedido” más consistente */
+.woocommerce-checkout #payment .place-order .button{
+  width: 100%; border-radius: 14px; padding: 12px; font-size: 1rem;
+}
+
+/* Ajustes del bloque de pago (borde y radios) */
+.woocommerce-checkout #payment{
+  background: #141416; border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px; padding: 12px;
+}
+
+/* Responsive: apilar */
+@media (max-width: 980px){
+  .woocommerce-checkout form.checkout{ grid-template-columns: 1fr !important; }
+  .woocommerce-checkout #order_review{ position: static; margin-top: 16px; }
+}
+
+/* Checkout: "Añade una nota a tu pedido" en blanco */
+.woocommerce-checkout .woocommerce-form__label-for-checkbox,
+.woocommerce-checkout .woocommerce-additional-fields .form-row label{
+  color: #fff !important;
+}
+
+/* (opcional) Mejora visual del checkbox */
+.woocommerce-checkout input[type="checkbox"]{
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.6);
+  background: #0f0f11;
+  vertical-align: middle;
+  margin-right: 8px;
+  accent-color: #fff; /* caja blanca; si prefieres morado usa #7a58ff */
+}
+
+.fort-grid-2col{
+  display: grid;
+  grid-template-columns: minmax(420px, 1fr) 1fr; /* galería | info */
+  gap: 28px;
+  align-items: start;
+}
+.fort-reco{ margin-top: 32px; }
+.fort-reco__title{ font-size: 1.25rem; margin: 0 0 12px; }
+
+@media (max-width: 980px){
+  .fort-grid-2col{ grid-template-columns: 1fr; }
+}
