@@ -974,59 +974,9 @@ body.woocommerce-cart .site-content > .ast-container{
   display: none !important;
 }
 
-/* Contenedor centrado para el nuevo botón */
-.cart-update-center{
-  display: flex;
-  justify-content: center;
-  margin: 18px 0 10px;   /* espacio bajo la tabla y sobre los totales */
-}
-
-/* Estilo del botón (ajusta a tu gusto) */
-.cart-update-center .button{
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: .95rem;
-}
-
-
 /* Ocultar botón original del tfoot */
 .woocommerce-cart td.actions button[name="update_cart"]{
   display: none !important;
-}
-
-/* Contenedor centrado para el nuevo botón */
-.cart-update-center{
-  display: flex;
-  justify-content: center;
-  margin: 18px 0 10px;   /* espacio bajo la tabla y sobre los totales */
-}
-
-/* Estilo del botón (ajusta a tu gusto) */
-.cart-update-center .button{
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: .95rem;
-}
-
-/* Update btn: más grande y con más aire respecto al subtotal */
-.cart-update-center{
-  justify-content: center;
-  margin-top: 14px;      /* espacio respecto a la tabla */
-  margin-bottom: 32px;   /* ↑ separa del subtotal (más arriba visualmente) */
-}
-
-.cart-update-center .button{
-  padding: 14px 24px;    /* tamaño del botón */
-  font-size: 1rem;       /* texto un poco más grande */
-  border-radius: 14px;
-  min-width: 220px;      /* ancho mínimo para que se vea “botón” */
-  /* opcional: pequeña sombra para realce */
-  box-shadow: 0 6px 16px rgba(0,0,0,.2);
-}
-
-/* Hover opcional */
-.cart-update-center .button:hover{
-  transform: translateY(-1px);
 }
 
 /* Totales centrados debajo del botón "Actualizar carrito" */
@@ -1079,4 +1029,218 @@ body.woocommerce-cart .site-content > .ast-container{
 .woocommerce-cart .cart_totals .shop_table td{
   background: #0f0f11 !important;
   border-color: rgba(255,255,255,.08);
+}
+
+/* 2) Ensanchar la columna "Cantidad" para que no corte el texto */
+.woocommerce-cart table.shop_table th.product-quantity,
+.woocommerce-cart table.shop_table td.product-quantity{
+  width: 100px !important;   /* sube a 110px si aún corta */
+  white-space: nowrap;       /* evita salto de línea */
+  text-align: right;
+}
+
+.woocommerce-cart .quantity .qty{
+  width: 64px;               /* acompaña el aumento de la columna */
+  height: 36px;
+  text-align: center;
+}
+
+/* 4) Ocultar la fila de Subtotal SOLO en el carrito */
+.woocommerce-cart .cart_totals .cart-subtotal{
+  display: none !important;
+}
+
+/* === Carrito: contorno redondo y fondo gris-negro tipo cards === */
+:root{
+  --cart-card-bg: #141416;                 /* mismo tono de tus cards */
+  --cart-card-bd: rgba(255,255,255,.08);   /* borde suave */
+  --cart-card-hd: rgba(255,255,255,.06);   /* banda de encabezado */
+  --cart-card-radius: 18px;                /* sube a 20/22 si quieres más redondo */
+}
+
+/* Tabla completa como “card” */
+.woocommerce-cart table.shop_table{
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--cart-card-bg);
+  border: 1px solid var(--cart-card-bd);
+  border-radius: var(--cart-card-radius);
+  overflow: hidden; /* redondea cabeceras también */
+}
+
+/* Encabezado de la tabla (banda superior) */
+.woocommerce-cart table.shop_table thead th{
+  background: var(--cart-card-hd) !important;
+  color: rgba(255,255,255,.85);
+  border-color: var(--cart-card-bd) !important;
+}
+
+/* Separadores entre filas (sin cambiar paddings) */
+.woocommerce-cart table.shop_table tbody tr + tr td{
+  border-top: 1px solid var(--cart-card-bd) !important;
+}
+
+/* “Card” de totales con el mismo estilo */
+.woocommerce-cart .cart_totals{
+  background: var(--cart-card-bg);
+  border: 1px solid var(--cart-card-bd);
+  border-radius: var(--cart-card-radius);
+}
+.woocommerce-cart .cart_totals .shop_table,
+.woocommerce-cart .cart_totals .shop_table th,
+.woocommerce-cart .cart_totals .shop_table td{
+  background: transparent !important;
+  border-color: var(--cart-card-bd) !important;
+}
+
+
+/* 1) Carrito: quita por completo la fila de acciones (tfoot) para eliminar el gap bajo la tabla */
+.woocommerce-cart table.shop_table tfoot{
+  display: none !important;
+}
+
+/* Asegura que la última fila NO deje línea extra */
+.woocommerce-cart table.shop_table tbody tr:last-child td{
+  border-bottom: 0 !important;
+}
+
+/* 2) Totales: elimina la línea/espacio bajo "Precio final:" y pega el primer renglón */
+.woocommerce-cart .cart_totals h2{
+  border: 0 !important;          /* quitamos la línea oscura que pusimos antes */
+  padding-bottom: 0 !important;  /* sin padding extra */
+  margin-bottom: 6px !important; /* pegado al cuadro de totales */
+}
+
+/* Quita borde/espacio superior del primer renglón de la tabla de totales */
+.woocommerce-cart .cart_totals .shop_table{
+  margin-top: 0 !important;
+  border-top: 0 !important;
+}
+.woocommerce-cart .cart_totals .shop_table tbody tr:first-child th,
+.woocommerce-cart .cart_totals .shop_table tbody tr:first-child td{
+  border-top: 0 !important;      /* sin línea negra arriba */
+  padding-top: 10px !important;  /* ajusta si lo quieres más pegado (8–12px) */
+}
+
+/* Más espacio y alineación del título "Precio final:" */
+.woocommerce-cart .cart_totals{
+  /* ya está centrado; solo damos un pelín más de respiración interna */
+  padding: 20px 20px 18px !important;   /* ↑ top  | ←→ sides | ↓ bottom */
+  margin-left: auto; 
+  margin-right: auto;                   /* centro garantizado */
+  max-width: 540px;                     /* ajusta si quieres */
+}
+
+.woocommerce-cart .cart_totals h2{
+  /* separa del borde superior y alinea con el contenido de la tabla */
+  padding-top: 8px !important;
+  padding-inline: 16px !important;      /* despega del borde izquierdo */
+  margin-bottom: 8px !important;        /* pequeño aire antes del primer renglón */
+}
+
+/* === Cantidad: estilo pill con botones + / – (carrito) === */
+:root{
+  --accent: #7a58ff; /* usa tu morado; si tienes una var global, cámbiala aquí */
+}
+
+/* Oculta los spinners nativos */
+.woocommerce-cart .quantity .qty{
+  -moz-appearance: textfield;
+}
+.woocommerce-cart .quantity .qty::-webkit-outer-spin-button,
+.woocommerce-cart .quantity .qty::-webkit-inner-spin-button{
+  -webkit-appearance: none; margin: 0;
+}
+
+/* Contenedor pill */
+.woocommerce-cart td.product-quantity .quantity{
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #0f0f11;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 4px;
+}
+
+/* Input */
+.woocommerce-cart .quantity .qty{
+  width: 52px;                /* era ~56; ajusta si quieres más ancho */
+  height: 32px;
+  border: 0; outline: none;
+  background: transparent;
+  color: #fff; text-align: center; font-weight: 700;
+}
+
+/* Botones + / – */
+.woocommerce-cart .qty-btn{
+  width: 28px; height: 28px;
+  border-radius: 10px;
+  display: inline-flex; align-items:center; justify-content:center;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  cursor: pointer; user-select: none;
+  line-height: 1; font-size: 18px; color: #ddd;
+}
+.woocommerce-cart .qty-btn:hover{
+  border-color: var(--accent);
+  color: #fff;
+}
+.woocommerce-cart .qty-btn:active{
+  transform: translateY(1px);
+}
+
+/* Si la columna “Cantidad” queda justa, dale un poquito más de aire */
+.woocommerce-cart table.shop_table th.product-quantity,
+.woocommerce-cart table.shop_table td.product-quantity{
+  width: 120px !important;   /* sube/baja según se vea */
+}
+
+/* --- Carrito: ajustar anchos de columnas para que "Cantidad" no salte --- */
+
+/* Hace que la tabla respete los anchos */
+.woocommerce-cart table.shop_table{ table-layout: fixed !important; }
+
+/* Precio: un poco más compacta, alineada a la derecha */
+.woocommerce-cart table.shop_table th.product-price,
+.woocommerce-cart table.shop_table td.product-price{
+  width: 100px !important;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Cantidad: más ancha para el pill (+/–) */
+.woocommerce-cart table.shop_table th.product-quantity,
+.woocommerce-cart table.shop_table td.product-quantity{
+  width: 170px !important;         /* ← sube/baja: 160–190 según se vea */
+  white-space: nowrap;
+}
+
+/* Subtotal: compacta y sin cortes */
+.woocommerce-cart table.shop_table th.product-subtotal,
+.woocommerce-cart table.shop_table td.product-subtotal{
+  width: 120px !important;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* El pill de cantidad: tamaño mínimo y no se parte */
+.woocommerce-cart td.product-quantity .quantity{
+  min-width: 132px;                /* asegura cabida del - [qty] + */
+  white-space: nowrap;
+}
+
+/* Ajustes del pill (si lo ves justo, puedes estrechar un poco) */
+.woocommerce-cart .qty-btn{ width: 28px; }  /* 26 si quieres más compacto */
+.woocommerce-cart .quantity .qty{ width: 48px; } /* 44 si cabe bien */
+
+/* Responsive: en móvil deja que fluya para evitar overflow */
+@media (max-width: 980px){
+  .woocommerce-cart table.shop_table th.product-price,
+  .woocommerce-cart table.shop_table td.product-price,
+  .woocommerce-cart table.shop_table th.product-quantity,
+  .woocommerce-cart table.shop_table td.product-quantity,
+  .woocommerce-cart table.shop_table th.product-subtotal,
+  .woocommerce-cart table.shop_table td.product-subtotal{
+    width: auto !important;
+  }
+  .woocommerce-cart td.product-quantity .quantity{ min-width: 0; }
 }

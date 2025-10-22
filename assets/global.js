@@ -142,3 +142,59 @@ document.addEventListener('DOMContentLoaded', () => {
     jQuery(document.body).on('added_to_cart wc_fragments_refreshed', scheduleHide);
   }
 });
+
+// Cantidad: botones +/– que sobreviven a los refrescos del carrito
+(function ($) {
+  if (!$('body').hasClass('woocommerce-cart')) return;
+
+  function enhanceQty($scope) {
+    $scope.find('td.product-quantity .quantity').each(function () {
+      const $box = $(this);
+      if ($box.data('enhanced') === 1) return;       // evita duplicados
+
+      const $input = $box.find('.qty');
+      if (!$input.length) return;
+
+      const $minus = $('<button type="button" class="qty-btn qty-minus" aria-label="Disminuir">–</button>');
+      const $plus  = $('<button type="button" class="qty-btn qty-plus"  aria-label="Incrementar">+</button>');
+
+      $minus.insertBefore($input);
+      $plus.insertAfter($input);
+      $box.data('enhanced', 1);
+
+      const step = parseFloat($input.attr('step')) || 1;
+      const min  = parseFloat($input.attr('min'));
+      const max  = parseFloat($input.attr('max'));
+
+      const num = () => parseFloat(($input.val() + '').replace(',', '.')) || 0;
+      const clamp = (v) => {
+        if (!isNaN(min)) v = Math.max(min, v);
+        if (!isNaN(max) && max > 0) v = Math.min(max, v);
+        return v;
+      };
+
+      $minus.on('click', () => {
+        $input.val(clamp(num() - step)).trigger('input').trigger('change');
+      });
+
+      $plus.on('click', () => {
+        $input.val(clamp(num() + step)).trigger('input').trigger('change');
+      });
+    });
+  }
+
+  // Primera carga
+  $(function () { enhanceQty($(document)); });
+
+  // Reinyectar tras cada refresco de WooCommerce
+  $(document.body).on('updated_wc_div wc_fragments_loaded wc_fragments_refreshed', function () {
+    enhanceQty($('.woocommerce'));
+  });
+
+  // Extra: si otro script reemplaza nodos sin lanzar eventos, observa cambios
+  const target = document.querySelector('.woocommerce');
+  if (target) {
+    const mo = new MutationObserver(() => enhanceQty($(document)));
+    mo.observe(target, { childList: true, subtree: true });
+  }
+})(jQuery);

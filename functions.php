@@ -300,16 +300,54 @@ add_filter('woocommerce_coupons_enabled', function ($enabled) {
   return $enabled;
 });
 
-// Botón "Actualizar carrito" centrado bajo la tabla (antes de los totales)
-add_action('woocommerce_after_cart_table', function () {
-  ?>
-  <div class="cart-update-center">
-    <button type="submit"
-            name="update_cart"
-            value="<?php esc_attr_e('Actualizar carrito','woocommerce'); ?>"
-            class="button">
-      <?php esc_html_e('Actualizar carrito','woocommerce'); ?>
-    </button>
-  </div>
-  <?php
-});
+// Cambios de strings SOLO en el carrito
+add_filter('gettext', function ($translated, $text, $domain) {
+  if (function_exists('is_cart') && is_cart() && $domain === 'woocommerce') {
+
+    // 1) Encabezado de la tabla
+    if ($text === 'Product' || $text === 'Producto') {
+      return 'Productos:'; // con dos puntos
+    }
+
+    // 3) Título del bloque de totales
+    if ($text === 'Cart totals' || $text === 'Totales del carrito') {
+      return 'Precio final:';
+    }
+  }
+  return $translated;
+}, 10, 3);
+
+// Carrito: actualizar automáticamente al cambiar cantidades (+, -, o escribir)
+add_action('wp_footer', function () {
+  if ( ! is_cart() ) return; ?>
+  <script>
+  (function(){
+    let timer;
+    function scheduleUpdate(){
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        const btn = document.querySelector('.cart-update-center button[name="update_cart"], button[name="update_cart"]');
+        if(btn){
+          // Por si algún tema lo deshabilita hasta que hay cambios
+          btn.removeAttribute('disabled');
+          btn.click();
+        }
+      }, 600); // debounce: espera 0.6s por si el usuario sigue presionando
+    }
+
+    // Escribir en el input
+    document.addEventListener('input', function(e){
+      if (e.target && e.target.classList && e.target.classList.contains('qty')) {
+        scheduleUpdate();
+      }
+    });
+
+    // Click en los botones +/–
+    document.addEventListener('click', function(e){
+      if (e.target && e.target.classList && e.target.classList.contains('qty-btn')) {
+        scheduleUpdate();
+      }
+    });
+  })();
+  </script>
+<?php });
