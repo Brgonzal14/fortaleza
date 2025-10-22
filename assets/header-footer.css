@@ -558,118 +558,6 @@
 }
 
 /* =========================================================
-   CARRITO (Layout Simplificado para Astra)
-   ========================================================= */
-
-/* ASTRA: ELIMINADO
-   Las reglas para #primary y #secondary ya no son necesarias.
-   Asegúrate de que la página del carrito esté configurada como
-   "Ancho completo / Contenido" en los ajustes de página de Astra.
-*/
-
-/* ASTRA: SIMPLIFICADO
-   Ahora la regla solo necesita crear el grid. El centrado y ancho
-   lo maneja el contenedor principal de Astra.
-*/
-.woocommerce-cart .woocommerce {
-    display: grid !important;
-    grid-template-columns: 1fr 380px !important;
-    gap: 32px !important;
-    align-items: start !important;
-    margin-top: 32px;
-}
-
-/* Estilos de la tabla de productos (Mantenido) */
-.woocommerce-cart form.woocommerce-cart-form,
-.woocommerce-cart table.shop_table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #141416;
-    border: 1px solid rgba(255, 255, 255, .10);
-    border-radius: 16px;
-    overflow: hidden;
-}
-.woocommerce-cart table.shop_table thead {
-    background: rgba(255, 255, 255, .04);
-}
-.woocommerce-cart table.shop_table th,
-.woocommerce-cart table.shop_table td {
-    padding: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, .10);
-    vertical-align: middle;
-    text-align: left;
-}
-.woocommerce-cart table.shop_table tr:last-child td {
-    border-bottom: none;
-}
-.woocommerce-cart table.shop_table .product-thumbnail img {
-    width: 60px;
-    border-radius: 8px;
-}
-.woocommerce-cart table.shop_table .product-name a {
-    color: var(--txt);
-    text-decoration: none;
-    font-weight: 600;
-}
-.woocommerce-cart table.shop_table .product-name a:hover {
-    color: var(--accent);
-}
-.woocommerce-cart table.shop_table .product-quantity,
-.woocommerce-cart table.shop_table .product-price,
-.woocommerce-cart table.shop_table .product-subtotal {
-    text-align: right;
-}
-
-/* Estilos de los totales (Mantenido) */
-.woocommerce-cart .cart-collaterals {
-    width: 100%;
-}
-.woocommerce-cart .cart-collaterals .cart_totals {
-    background: #141416;
-    padding: 24px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, .10);
-}
-.woocommerce-cart .cart_totals h2 {
-    font-size: 1.5rem;
-    margin-top: 0;
-    margin-bottom: 16px;
-}
-.woocommerce-cart .wc-proceed-to-checkout a.checkout-button {
-    text-align: center;
-    border-radius: 12px;
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-}
-
-/* Vista móvil del carrito (Mantenido) */
-@media (max-width: 980px) {
-    .woocommerce-cart .woocommerce {
-        grid-template-columns: 1fr !important; /* Apilamos en una sola columna */
-    }
-    .woocommerce-cart .cart-collaterals {
-        margin-top: 24px;
-    }
-}
-
-/* Apuntamos a las páginas que usan el layout de ancho completo de Astra */
-.ast-page-builder-template .entry-content,
-.full-width-stretched .entry-content {
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100%;
-}
-
-/* También forzamos el contenedor principal a no tener padding y ocupar el 100% */
-.ast-page-builder-template .site-content > .ast-container,
-.full-width-stretched .site-content > .ast-container {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-}
-
-/* =========================================================
    MI CUENTA — Layout + look Fortaleza
    ========================================================= */
 
@@ -970,3 +858,9 @@ body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .ti
   white-space: normal;       /* que pueda partirse si hace falta */
   /* (mantén tu tamaño y padding actuales) */
 }
+
+@media (max-width: 700px){
+  .fort-acc__nav a{ min-height:44px; padding:10px 12px; }
+  .woocommerce-MyAccount-content{ padding:14px; }
+}
+
