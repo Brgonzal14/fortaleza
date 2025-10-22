@@ -708,7 +708,7 @@
 
 /* Caja contenido (derecha) */
 .woocommerce-account .woocommerce-MyAccount-content{
-  background:#141416;
+  background:#141416 !important;
   border:1px solid rgba(255,255,255,.08);
   border-radius:16px;
   padding:24px 28px;
@@ -824,4 +824,149 @@
 body.woocommerce-account .entry-header,
 body.woocommerce-account .entry-header .entry-title{
   display: none !important;
+}
+
+/* ================================
+   Mi Cuenta — Estilo Cajas Internas (Fix 2)
+   ================================ */
+
+/* 6) Estilo oscuro para cajas de "Mis Direcciones" (Forzado) */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address {
+  background: #16171b !important; /* Fondo oscuro (forzado) */
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: var(--r-lg, 20px) !important;
+  padding: 20px 24px !important;
+  color: inherit !important; /* Forzar color de texto */
+}
+
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address address {
+  color: inherit;
+  border: 0;
+  padding: 0;
+}
+
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address h3 {
+  color: #fff;
+  margin-top: 0;
+}
+
+/* 7) Estilo oscuro para avisos (ej. "No hay pedidos") (Forzado) */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info,
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Message {
+  background: #16171b !important; /* Mismo fondo oscuro (forzado) */
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: var(--r-lg, 20px) !important;
+  padding: 20px 24px !important;
+  color: inherit !important;
+  /* Sobreescribir bordes de color por defecto */
+  border-top-width: 1px !important;
+  border-left-width: 1px !important;
+}
+
+/* 8) OCULTAR el ícono morado de la caja de aviso */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info::before,
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Message::before {
+  display: none !important;
+}
+
+/* 9) Asegurar que el botón dentro del aviso "No hay pedidos" use el color de acento */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info a.button,
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Message a.button {
+  background-color: var(--accent, #7c5cff);
+  color: #fff;
+}
+
+/* ===== Mi Cuenta → Direcciones: quitar fondo blanco de los headers ===== */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address{
+  background:#16171b;                     /* tu fondo oscuro */
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:20px;
+  padding:20px 24px;
+}
+
+/* El header (título + link Editar) trae el fondo blanco: lo anulamos */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .title,
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .woocommerce-Address-title,
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .woocommerce-column__title{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 0 12px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Título y link */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .title h3{
+  margin:0; color:#fff;
+}
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .title .edit{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:10px;
+  background: var(--accent, #7c5cff);
+  color:#fff; text-decoration:none; font-weight:700;
+}
+
+/* A veces el fondo blanco está en <address> por CSS del tema */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address address{
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: var(--txt, #f5f5f7);
+}
+
+/* Mi Cuenta → Direcciones: reducir títulos de cada tarjeta */
+.fort-acc .woocommerce-Address h2.woocommerce-column__title,
+.fort-acc .woocommerce-Address h3.woocommerce-column__title,
+.fort-acc .woocommerce-Address .title h2,
+.fort-acc .woocommerce-Address .title h3{
+  font-size: 18px !important;      /* ajusta 16–20px a gusto */
+  line-height: 1.25;
+  margin: 0 0 10px !important;
+  font-weight: 700;                 /* 700 = menos pesado que 800 */
+}
+
+
+/* Texto del address */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address address{
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .title .edit{
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  line-height: 1.1;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;   /* intenta mantenerlo en una línea */
+}
+
+/* Si igual te envuelve el texto a dos líneas por lo largo del español, mantén el tamaño del pill */
+body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .title .edit{
+  max-width: max-content;
+}
+
+
+/* Mi Cuenta → Direcciones: mover el botón debajo del título */
+.fort-acc .woocommerce-Address .woocommerce-Address-title,
+.fort-acc .woocommerce-Address .title{
+  display: flex !important;
+  flex-direction: column !important;   /* ↓ debajo del h3 */
+  align-items: flex-start !important;
+  gap: 8px;
+}
+
+/* El “Editar/Añadir dirección” como pill alineado a la izquierda */
+.fort-acc .woocommerce-Address .title .edit{
+  align-self: flex-start;
+  margin: 0;                 /* sin desplazamientos raros */
+  display: inline-block;     /* permite caer a 2 líneas si es muy largo */
+  max-width: 100%;
+  white-space: normal;       /* que pueda partirse si hace falta */
+  /* (mantén tu tamaño y padding actuales) */
 }
