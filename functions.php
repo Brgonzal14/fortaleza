@@ -293,3 +293,23 @@ add_filter('woocommerce_account_menu_items', function ($items) {
 add_filter('woocommerce_endpoint_orders_title',        fn() => __('Mis pedidos', 'fortaleza'));
 add_filter('woocommerce_endpoint_edit-address_title',  fn() => __('Mis direcciones', 'fortaleza'));
 add_filter('woocommerce_endpoint_edit-account_title',  fn() => __('Detalles de mi cuenta', 'fortaleza'));
+
+// Ocultar formulario de cupones solo en la página del carrito
+add_filter('woocommerce_coupons_enabled', function ($enabled) {
+  if ( is_cart() ) { return false; } // en Checkout seguirá activo
+  return $enabled;
+});
+
+// Botón "Actualizar carrito" centrado bajo la tabla (antes de los totales)
+add_action('woocommerce_after_cart_table', function () {
+  ?>
+  <div class="cart-update-center">
+    <button type="submit"
+            name="update_cart"
+            value="<?php esc_attr_e('Actualizar carrito','woocommerce'); ?>"
+            class="button">
+      <?php esc_html_e('Actualizar carrito','woocommerce'); ?>
+    </button>
+  </div>
+  <?php
+});

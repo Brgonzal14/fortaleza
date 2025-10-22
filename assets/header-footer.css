@@ -864,3 +864,219 @@ body.woocommerce-account .woocommerce-MyAccount-content .woocommerce-Address .ti
   .woocommerce-MyAccount-content{ padding:14px; }
 }
 
+/* ===== Carrito — Reducir ancho y escala (override) ===== */
+
+/* 1) Volvemos a dar contenedor con ancho razonable solo en Carrito */
+body.woocommerce-cart .site-content > .ast-container{
+  max-width: var(--container-max, 1240px) !important;
+  padding-inline: var(--container-px, 16px) !important;
+  margin: 0 auto !important;
+}
+
+/* 2) Limitamos el ancho del bloque del carrito y ajustamos la grilla */
+.woocommerce-cart .woocommerce{
+  max-width: 1100px;                 /* ← ancho total “prudente” */
+  margin: 24px auto 56px;            /* centrado y respiración */
+  grid-template-columns: minmax(520px, 1fr) 340px !important; /* tabla + totales */
+  gap: 22px !important;
+}
+
+/* 3) Tabla más compacta */
+.woocommerce-cart table.shop_table thead th{
+  padding-top: 10px; padding-bottom: 10px;
+  font-size: .92rem; letter-spacing: .2px;
+}
+.woocommerce-cart table.shop_table th,
+.woocommerce-cart table.shop_table td{
+  padding: 12px 14px;                /* antes 16px */
+  font-size: .95rem;
+}
+.woocommerce-cart table.shop_table .product-thumbnail img{
+  width: 54px; border-radius: 8px;
+}
+
+/* 4) Totales más contenidos */
+.woocommerce-cart .cart_totals{
+  padding: 18px;                      /* antes 24px */
+}
+.woocommerce-cart .cart_totals h2{
+  font-size: 1.25rem;                 /* antes 1.5rem */
+  margin: 0 0 12px;
+}
+.woocommerce-cart .wc-proceed-to-checkout a.checkout-button{
+  padding: 12px;                      /* antes 14px */
+  font-size: 1rem;                    /* antes 1.1rem */
+  border-radius: 14px;
+}
+
+/* 5) Controles de cupón/actualizar más discretos */
+.woocommerce-cart .coupon .input-text{
+  height: 40px; border-radius: 12px;
+}
+.woocommerce-cart .coupon .button,
+.woocommerce-cart button[name="update_cart"]{
+  padding: 10px 14px; border-radius: 12px; font-size: .95rem;
+}
+
+/* 6) Móvil sigue apilado en 1 columna (ya lo tenías, lo mantenemos) */
+@media (max-width: 980px){
+  .woocommerce-cart .woocommerce{ max-width: 720px; }
+}
+
+
+/* Cart: reducir a la mitad la columna de la X y dar más espacio al nombre */
+.woocommerce-cart table.shop_table{
+  table-layout: fixed; /* respeta los anchos que definimos abajo */
+}
+
+/* 1) Columna de eliminar (X) más angosta */
+.woocommerce-cart table.shop_table th.product-remove,
+.woocommerce-cart table.shop_table td.product-remove{
+  width: 34px !important;          /* ← antes mucho más ancha */
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  text-align: center;
+}
+
+/* Botón X más pequeño */
+.woocommerce-cart table.shop_table td.product-remove a.remove{
+  width: 22px; height: 22px;       /* ← tamaño del círculo */
+  line-height: 22px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+}
+
+/* 2) Mantener compactas las otras columnas para que el nombre crezca */
+.woocommerce-cart table.shop_table th.product-thumbnail,
+.woocommerce-cart table.shop_table td.product-thumbnail{ width: 64px !important; }
+
+.woocommerce-cart table.shop_table th.product-price,
+.woocommerce-cart table.shop_table td.product-price{ width: 88px !important; text-align: right; }
+
+.woocommerce-cart table.shop_table th.product-quantity,
+.woocommerce-cart table.shop_table td.product-quantity{ width: 78px !important; text-align: right; }
+.woocommerce-cart .quantity .qty{ width: 56px; height: 36px; text-align: center; }
+
+.woocommerce-cart table.shop_table th.product-subtotal,
+.woocommerce-cart table.shop_table td.product-subtotal{ width: 100px !important; text-align: right; }
+
+/* 3) Deja que el nombre ocupe el resto (y que corte bien) */
+.woocommerce-cart table.shop_table td.product-name{ width: auto !important; }
+.woocommerce-cart table.shop_table .product-name a{
+  white-space: normal; word-break: break-word;
+}
+
+/* Ocultar botón original del tfoot */
+.woocommerce-cart td.actions button[name="update_cart"]{
+  display: none !important;
+}
+
+/* Contenedor centrado para el nuevo botón */
+.cart-update-center{
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 10px;   /* espacio bajo la tabla y sobre los totales */
+}
+
+/* Estilo del botón (ajusta a tu gusto) */
+.cart-update-center .button{
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: .95rem;
+}
+
+
+/* Ocultar botón original del tfoot */
+.woocommerce-cart td.actions button[name="update_cart"]{
+  display: none !important;
+}
+
+/* Contenedor centrado para el nuevo botón */
+.cart-update-center{
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 10px;   /* espacio bajo la tabla y sobre los totales */
+}
+
+/* Estilo del botón (ajusta a tu gusto) */
+.cart-update-center .button{
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: .95rem;
+}
+
+/* Update btn: más grande y con más aire respecto al subtotal */
+.cart-update-center{
+  justify-content: center;
+  margin-top: 14px;      /* espacio respecto a la tabla */
+  margin-bottom: 32px;   /* ↑ separa del subtotal (más arriba visualmente) */
+}
+
+.cart-update-center .button{
+  padding: 14px 24px;    /* tamaño del botón */
+  font-size: 1rem;       /* texto un poco más grande */
+  border-radius: 14px;
+  min-width: 220px;      /* ancho mínimo para que se vea “botón” */
+  /* opcional: pequeña sombra para realce */
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+}
+
+/* Hover opcional */
+.cart-update-center .button:hover{
+  transform: translateY(-1px);
+}
+
+/* Totales centrados debajo del botón "Actualizar carrito" */
+.woocommerce-cart .cart-collaterals{
+  /* ocupa toda la fila del grid, bajo el formulario (tabla + botón) */
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+
+  /* centrado horizontal */
+  display: flex;
+  justify-content: center;
+
+  /* separación respecto al botón */
+  margin-top: 16px;
+
+  /* por si antes dejamos sticky en desktop */
+  position: static !important;
+}
+
+/* Ancho del "card" de totales (ajusta a gusto) */
+.woocommerce-cart .cart_totals{
+  max-width: 520px;   /* 480–560px queda bien */
+  width: 100%;
+  margin: 0 auto;     /* centro garantizado */
+}
+
+/* ----- Cart: headers y título de totales a fondo oscuro ----- */
+
+/* Cabecera de la tabla de productos */
+.woocommerce-cart table.shop_table thead,
+.woocommerce-cart table.shop_table thead th{
+  background: #0f0f11 !important;             /* oscuro */
+  color: rgba(255,255,255,.75) !important;     /* texto legible */
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+/* Card de totales: quita la banda blanca del título */
+.woocommerce-cart .cart_totals h2{
+  background: transparent !important;          /* sin fondo blanco */
+  color: rgba(255,255,255,.9);
+  margin: 0 0 12px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+/* Asegurar que dentro de totales no aparezcan fondos blancos residuales */
+.woocommerce-cart .cart_totals,
+.woocommerce-cart .cart_totals .shop_table,
+.woocommerce-cart .cart_totals .shop_table th,
+.woocommerce-cart .cart_totals .shop_table td{
+  background: #0f0f11 !important;
+  border-color: rgba(255,255,255,.08);
+}
