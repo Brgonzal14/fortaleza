@@ -1374,17 +1374,19 @@ body.woocommerce-checkout .site-content > .ast-container{
 /* ===== Login / Register centrados y un poco más grandes ===== */
 
 /* 1) Centrar la “tarjeta” del formulario en páginas normales con [woocommerce_my_account] */
-.page .woocommerce form.login,
-.page .woocommerce form.register{
-  width: min(560px, 92vw);        /* ← agranda/achica cambiando 560px */
-  margin: 32px auto 80px;         /* centrado y con aire arriba/abajo */
+body.page-template-default .woocommerce form.login, /* Más específico para páginas de Login/Registro */
+body.page-template-default .woocommerce form.register {
+  width: min(560px, 92vw);
+  margin: 32px auto 80px !important; /* <--- CENTRADO FORZADO */
   background:#141416;
   border:1px solid rgba(255,255,255,.10);
   border-radius:18px;
   padding:22px 24px;
   box-shadow:0 8px 26px rgba(0,0,0,.28);
+  /* Asegurarse de que no flote */
+  float: none !important;
+  clear: both !important;
 }
-
 /* 2) Inputs más altos y cómodos */
 .page .woocommerce form .form-row input.input-text,
 .page .woocommerce form .input-text,
@@ -1415,3 +1417,110 @@ body.woocommerce-checkout .site-content > .ast-container{
   display:inline-flex; align-items:center; gap:8px;
 }
 
+/* ==========================
+   Login / Registro (centrado)
+   ========================== */
+
+/* 1) Centrar el contenido de las páginas que usan [woocommerce_my_account] */
+body.woocommerce-account .site-content > .ast-container{
+  max-width: 980px;              /* ancho de la zona de contenido */
+  margin: 0 auto !important;     /* centrado del contenedor */
+  padding-inline: 24px;
+}
+
+/* 2) Centrar el bloque del formulario y limitar su ancho */
+body.woocommerce-account #customer_login{
+  width: min(620px, 100%);
+  margin: 24px auto 96px;        /* <-- centrado */
+}
+
+/* 3) Obligar a que el “col2-set” se comporte como 1 sola columna
+      (aunque Woo piense que son 2) y quite floats/anchos fijos */
+body.woocommerce-account .u-columns.col2-set{
+  display: block !important;
+}
+body.woocommerce-account .u-columns .col-1,
+body.woocommerce-account .u-columns .col-2{
+  float: none !important;
+  width: 100% !important;
+}
+
+/* 4) Título centrado (opcional) */
+body.woocommerce-account .entry-header{
+  text-align: center;
+}
+
+/* 5) Tarjeta y visual (mantiene el estilo que te gustó) */
+body.woocommerce-account .woocommerce form.login,
+body.woocommerce-account .woocommerce form.register{
+  background: #15151a;
+  border-radius: 16px;
+  padding: 24px 28px 28px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06);
+}
+
+/* === Login / Registro: centrar 100% el contenido === */
+/* Usa los slugs reales de tus páginas. Si no los tienes, cambia por .page-id-XXX */
+.page-ingresar .entry-header,
+.page-registrarse .entry-header{
+  text-align: center;
+}
+
+/* El contenedor de la página empuja al centro */
+.page-ingresar .entry-content,
+.page-registrarse .entry-content{
+  display: flex;
+  justify-content: center;   /* centra horizontal */
+}
+
+/* Gutenberg envuelve el shortcode en .wp-block-shortcode: lo centramos también */
+.page-ingresar .entry-content .wp-block-shortcode,
+.page-registrarse .entry-content .wp-block-shortcode{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Limitamos y centramos la “tarjeta” de Woo dentro del wrapper */
+.page-ingresar .entry-content .wp-block-shortcode > .woocommerce,
+.page-registrarse .entry-content .wp-block-shortcode > .woocommerce{
+  width: min(720px, 100%);   /* mismo ancho que venías usando, ajusta si quieres */
+  margin-inline: auto;
+}
+
+/* Un poquito más de separación arriba para que se vea equilibrado */
+.page-ingresar .entry-content .wp-block-shortcode > .woocommerce,
+.page-registrarse .entry-content .wp-block-shortcode > .woocommerce{
+  margin-top: 12px;
+}
+
+/* ===== Mi cuenta (Ingresar / Registrarse) — centrado fino ===== */
+
+/* Limita y centra el bloque principal */
+body.woocommerce-account .site-content > .ast-container {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* Centra el wrapper visualmente */
+body.woocommerce-account .entry-content {
+  display: grid;
+  justify-items: center;
+}
+
+/* Forzado de centrado absoluto del formulario (no depende del padding del padre) */
+body.woocommerce-account form.woocommerce-form-login,
+body.woocommerce-account form.woocommerce-form-register {
+  width: min(740px, calc(100% - 48px));   /* mismo ancho que dejaste, con respiración */
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 24px 0 56px;                    /* separación arriba/abajo */
+}
+
+/* (opcional) centra el título visualmente respecto al formulario */
+body.woocommerce-account .entry-content > h2,
+body.woocommerce-account .woocommerce h2 {
+  text-align: center;
+}
