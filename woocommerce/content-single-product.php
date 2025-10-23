@@ -36,4 +36,14 @@ if ( post_password_required() ) {
 		?>
 	</div>
 </div>
+
+<section class="fort-reco">
+	<?php
+	woocommerce_output_related_products( array(
+		'posts_per_page' => 4,
+		'columns'        => 4,
+	) );
+	?>
+</section>
+
 <?php do_action('woocommerce_after_single_product'); ?>
