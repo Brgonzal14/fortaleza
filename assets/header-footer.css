@@ -1524,3 +1524,233 @@ body.woocommerce-account .entry-content > h2,
 body.woocommerce-account .woocommerce h2 {
   text-align: center;
 }
+
+/* =========================
+   Carrito – Fix móvil
+   ========================= */
+@media (max-width: 768px){
+  /* 1) El grid del carrito pasa a 1 columna y ocupa todo el ancho */
+  .woocommerce-cart .woocommerce{
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    max-width: 100% !important;
+    padding-inline: 12px !important;
+    margin: 16px auto 40px !important;
+    display: grid !important; /* por si el tema cambia display */
+  }
+
+  /* 2) La tabla y el bloque de totales ocupan 100% */
+  .woocommerce-cart table.shop_table,
+  .woocommerce-cart .cart_totals{
+    width: 100% !important;
+    margin: 0 0 16px !important;
+  }
+
+  /* 3) Celda/encabezados más compactos */
+  .woocommerce-cart table.shop_table th,
+  .woocommerce-cart table.shop_table td{
+    padding: 10px 12px !important;
+  }
+
+  /* 4) Miniatura un poco más pequeña para que quepa todo cómodo */
+  .woocommerce-cart table.shop_table .product-thumbnail img{
+    width: 56px !important;
+    border-radius: 8px !important;
+  }
+
+  /* 5) Controles de cantidad (+ / – / input) cómodos al tacto */
+  .woocommerce-cart td.product-quantity .quantity{
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .woocommerce-cart .qty-btn{
+    width: 36px; height: 36px;
+    border-radius: 12px;
+    line-height: 36px;
+  }
+  .woocommerce-cart input.qty{
+    width: 56px; height: 36px;
+    text-align: center;
+    border-radius: 10px;
+  }
+
+  /* 6) Botón de finalizar compra a lo ancho */
+  .woocommerce-cart .wc-proceed-to-checkout a.checkout-button{
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 1rem !important;
+  }
+
+  /* 7) (Si aún aparece el área de cupón/acciones) que no rompa el layout */
+  .woocommerce-cart .actions,
+  .woocommerce-cart .coupon{
+    display: block !important;
+    width: 100% !important;
+  }
+}
+
+/* (Opcional) si notas scroll lateral en algunas vistas */
+@media (max-width: 768px){
+  html, body { overflow-x: hidden; }
+}
+
+/* Orden explícito: primero productos (cart), luego totales (totals) */
+.woocommerce-cart .woocommerce {
+  display: grid !important;
+  grid-template-columns: minmax(520px, 1fr) 340px; /* escritorio */
+  grid-template-areas: "cart totals";
+  align-items: start;
+  gap: 24px;
+}
+
+/* asignamos las áreas */
+.woocommerce-cart .woocommerce .woocommerce-cart-form { grid-area: cart; }
+.woocommerce-cart .woocommerce .cart-collaterals,
+.woocommerce-cart .woocommerce .cart_totals { grid-area: totals; }
+
+/* En móvil: 1 columna, lista arriba y totales debajo */
+@media (max-width: 768px){
+  .woocommerce-cart .woocommerce{
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "cart"
+      "totals";
+  }
+}
+
+/* ===== Carrito: layout correcto por viewport ===== */
+
+/* 1) Escritorio: usa el layout normal (no flex) y la tabla a 100% */
+@media (min-width: 1024px) {
+  /* Asegura que NO quede en flex fuera de móvil */
+  .woocommerce-cart .woocommerce {
+    display: block !important;
+  }
+
+  /* La tabla de productos debe ocupar todo el ancho disponible */
+  .woocommerce-cart table.shop_table,
+  .woocommerce-page table.shop_table {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: table !important;
+  }
+
+  /* El formulario del carrito no debe quedar con anchuras fijas heredadas */
+  .woocommerce-cart .woocommerce-cart-form {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+  }
+
+  /* El bloque de totales puede ir centrado con un ancho cómodo */
+  .woocommerce-cart .cart-collaterals,
+  .woocommerce-cart .cart_totals {
+    width: 540px;
+    max-width: 90%;
+    margin: 40px auto 0;
+    float: none;
+  }
+}
+
+/* 2) Móvil: apila y fuerza que los totales vayan debajo de la tabla */
+@media (max-width: 1023px) {
+  .woocommerce-cart .woocommerce {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px;
+  }
+  .woocommerce-cart .woocommerce-cart-form { order: 1; }
+  .woocommerce-cart .cart-collaterals   { order: 2; }
+
+  /* La tabla debe ocupar todo el ancho del móvil */
+  .woocommerce-cart table.shop_table,
+  .woocommerce-page table.shop_table {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ===== Carrito: tamaño del bloque "Precio final" en escritorio ===== */
+@media (min-width: 1024px) {
+  /* Quita floats y centra el contenedor de totales */
+  .woocommerce-cart .cart-collaterals { 
+    display: block !important;
+    float: none !important;
+  }
+
+  /* Ancho cómodo y centrado del card de totales */
+  .woocommerce-cart .cart_totals {
+    float: none !important;
+    width: min(820px, 92vw);   /* -> sube el ancho; ajusta a gusto */
+    margin: 48px auto 0 !important;
+  }
+
+  /* Que la tabla interna ocupe todo el card */
+  .woocommerce-cart .cart_totals table {
+    width: 100% !important;
+  }
+
+  /* Botón full-width y un poco más alto */
+  .woocommerce-cart .cart_totals .wc-proceed-to-checkout a.checkout-button {
+    width: 100% !important;
+    height: 54px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+}
+
+/* Si quieres aún más ancho en pantallas muy grandes */
+@media (min-width: 1440px) {
+  .woocommerce-cart .cart_totals {
+    width: min(900px, 92vw);
+  }
+}
+
+
+/* === Cart totals: tamaño correcto por viewport === */
+
+/* Desktop / tablets grandes */
+@media (min-width: 1024px) {
+  /* Centrar y dar ancho cómodo al bloque de totales */
+  .woocommerce-cart .cart-collaterals,
+  .woocommerce-page .cart-collaterals {
+    float: none;
+    width: 100%;
+  }
+  .woocommerce-cart .cart-collaterals .cart_totals,
+  .woocommerce-page .cart-collaterals .cart_totals {
+    max-width: 720px;         /* <— ajusta a 680/760 si quieres más/menos ancho */
+    width: 100%;
+    margin: 40px auto 120px;  /* centrado */
+    padding: 28px 32px;
+  }
+
+  /* Asegura que la tabla ocupe todo el ancho disponible */
+  .woocommerce-cart .cart_totals table,
+  .woocommerce-page .cart_totals table {
+    width: 100%;
+  }
+
+  /* Botón grande como antes */
+  .woocommerce-cart .wc-proceed-to-checkout .checkout-button,
+  .woocommerce-page .wc-proceed-to-checkout .checkout-button {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 16px;
+    border-radius: 14px;
+  }
+}
+
+/* Móvil: mantener compacto y al 92–100% */
+@media (max-width: 1023px) {
+  .woocommerce-cart .cart-collaterals .cart_totals,
+  .woocommerce-page .cart-collaterals .cart_totals {
+    max-width: none;
+    width: 92%;
+    margin: 24px auto 80px;
+    padding: 20px;
+  }
+}
+
