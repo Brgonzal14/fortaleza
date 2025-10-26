@@ -326,3 +326,61 @@ add_action('wp_footer', function () {
   })();
   </script>
 <?php });
+
+/** =========================
+ *  BÚSQUEDA DE PRODUCTOS
+ *  - Busca por título, descripción, extracto y SKU
+ *  - Coincidencias parciales (LIKE)
+ *  ========================= */
+add_action('pre_get_posts', function($q){
+  if (is_admin() || !$q->is_main_query() || !$q->is_search()) return;
+  // Fuerza a buscar SOLO productos
+  $q->set('post_type', ['product']);
+  // Un poquito más “recall”
+  $q->set('posts_per_page', 24);
+});
+
+add_filter('posts_search', function($search, \WP_Query $q){
+  if (is_admin() || !$q->is_search()) return $search;
+  if (!in_array($q->get('post_type'), ['product', 'any', null, false], true)) return $search;
+
+  global $wpdb;
+  $s = trim($q->get('s'));
+  if ($s === '') return $search;
+
+  $like = '%' . $wpdb->esc_like($s) . '%';
+  // Busca en título, contenido, extracto y SKU
+  $search  = $wpdb->prepare(
+    " AND ( {$wpdb->posts}.post_title   LIKE %s
+         OR {$wpdb->posts}.post_content LIKE %s
+         OR {$wpdb->posts}.post_excerpt LIKE %s
+         OR EXISTS (
+              SELECT 1 FROM {$wpdb->postmeta} pm
+              WHERE pm.post_id = {$wpdb->posts}.ID
+                AND pm.meta_key = '_sku'
+                AND pm.meta_value LIKE %s
+            )
+        ) ",
+    $like, $like, $like, $like
+  );
+  return $search;
+}, 20, 2);
+
+/** =========================
+ *  FRAGMENTOS AJAX DEL MINI-CARRITO
+ *  - Refresca el contenido y el badge
+ *  ========================= */
+add_filter('woocommerce_add_to_cart_fragments', function($fragments){
+  // Contenido del mini-cart
+  ob_start();
+  woocommerce_mini_cart();
+  $fragments['div.widget_shopping_cart_content'] = ob_get_clean();
+
+  // Badge con el total de ítems
+  ob_start();
+  echo (int) WC()->cart->get_cart_contents_count();
+  $fragments['#cart-count'] = ob_get_clean();
+
+  return $fragments;
+});
+

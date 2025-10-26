@@ -117,17 +117,41 @@ endif;
       <!-- /Catálogo -->
 
       <!-- Buscador -->
-      <form class="search" role="search" method="get" action="<?php echo esc_url( home_url('/') ); ?>">
-        <span class="search-icon" aria-hidden="true">🔍</span>
-        <input type="search"
-               name="s"
-               placeholder="<?php echo esc_attr__( 'Buscar producto', 'fortaleza' ); ?>"
-               value="<?php echo esc_attr( get_search_query() ); ?>">
-        <input type="hidden" name="post_type" value="product">
-        <button class="search-btn" type="submit">
-          <?php echo esc_html__( 'Buscar', 'fortaleza' ); ?>
-        </button>
-      </form>
+<?php
+      // Conservamos el término ya buscado (si lo hay)
+$qs = isset($_GET['s']) ? wp_unslash($_GET['s']) : get_search_query();
+?>
+<form class="search"
+      role="search"
+      method="get"
+      action="<?php echo esc_url( home_url('/') ); ?>"
+      aria-label="<?php echo esc_attr__( 'Buscar productos', 'fortaleza' ); ?>">
+  <label for="site-search" class="screen-reader-text">
+    <?php echo esc_html__( 'Buscar productos por nombre o SKU', 'fortaleza' ); ?>
+  </label>
+
+  <span class="search-icon" aria-hidden="true">🔍</span>
+
+  <input
+    type="search"
+    id="site-search"
+    name="s"
+    placeholder="<?php echo esc_attr__( 'Buscar cartas, colecciones o SKU…', 'fortaleza' ); ?>"
+    value="<?php echo esc_attr( $qs ); ?>"
+    inputmode="search"
+    enterkeyhint="search"
+    autocomplete="on"
+    spellcheck="false"
+    required
+  >
+
+  <!-- Forzamos búsqueda sólo en productos -->
+  <input type="hidden" name="post_type" value="product">
+
+  <button class="search-btn" type="submit">
+    <?php echo esc_html__( 'Buscar', 'fortaleza' ); ?>
+  </button>
+</form>
 </div><!-- /.center-group -->
 
 <!-- Acciones derecha -->
@@ -185,22 +209,41 @@ endif;
   <?php endif; ?>
 
   <!-- Carrito -->
-  <button class="cart-btn" type="button" aria-controls="miniCartPanel" aria-expanded="false" aria-label="<?php echo esc_attr__( 'Abrir mini carrito', 'fortaleza' ); ?>">
+<div class="cart-wrap">
+  <button class="cart-btn"
+          type="button"
+          aria-controls="miniCartPanel"
+          aria-expanded="false"
+          aria-label="<?php echo esc_attr__( 'Abrir mini carrito', 'fortaleza' ); ?>">
     <span class="cart-ico" aria-hidden="true">
       <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
         <path d="M7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM3 4h2l2.4 10.2A2 2 0 0 0 9.36 16h8.86a2 2 0 0 0 1.94-1.52L22 7H6.3" fill="currentColor"/>
       </svg>
     </span>
     <span class="badge" id="cart-count">
-      <?php echo ( function_exists('WC') && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0; ?>
+      <?php echo ( function_exists( 'WC' ) && WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0; ?>
     </span>
   </button>
-</nav>
+
+<div class="cart-wrap">
+  <button class="cart-btn" type="button"
+          aria-controls="miniCartPanel"
+          aria-expanded="false"
+          aria-label="<?php echo esc_attr__( 'Abrir mini carrito', 'fortaleza' ); ?>">
+    <span class="cart-ico" aria-hidden="true">
+      <!-- tu SVG -->
+    </span>
+    <span class="badge" id="cart-count">
+      <?php echo ( function_exists('WC') && WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0; ?>
+    </span>
+  </button>
+
+  <!-- Panel ÚNICO del mini-carrito -->
+  <div id="miniCartPanel" class="mini-cart-panel" hidden>
+    <div class="widget_shopping_cart_content">
+      <?php woocommerce_mini_cart(); ?>
+    </div>
+  </div>
 </div>
 
-<!-- Panel mini-carrito (tu JS lo ancla dentro del botón al cargar) -->
-<div id="miniCartPanel" class="mini-cart-panel" hidden>
-  <?php if ( function_exists('woocommerce_mini_cart') ) woocommerce_mini_cart(); ?>
-</div>
-</header>
 

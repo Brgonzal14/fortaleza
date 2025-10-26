@@ -1862,3 +1862,81 @@ html, body {
   #catPanel .cat-root{ white-space: nowrap; }
 }
 
+
+/* === Mini-carrito: estilo burbuja anclada === */
+.cart-wrap { position: relative; }
+
+/* Soportar panel como hijo del botón o como hermano dentro de .cart-wrap */
+.cart-btn .mini-cart-panel,
+.cart-wrap .mini-cart-panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: min(380px, 92vw);
+  background: #141416;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  box-shadow: 0 18px 46px rgba(0,0,0,.45);
+  padding: 16px;
+  z-index: 10000; /* por encima del header */
+}
+
+/* Triangulito de la burbuja */
+.cart-btn .mini-cart-panel::before,
+.cart-wrap .mini-cart-panel::before {
+  content:"";
+  position:absolute;
+  top:-8px; right:22px;
+  width:16px; height:16px;
+  background:#141416;
+  border-left: 1px solid rgba(255,255,255,.12);
+  border-top: 1px solid rgba(255,255,255,.12);
+  transform: rotate(45deg);
+}
+
+/* Ocultar cuando [hidden] para evitar parpadeos */
+.cart-btn .mini-cart-panel[hidden],
+.cart-wrap .mini-cart-panel[hidden] { display:none !important; }
+
+/* Contenido del widget (espaciados y tipografías) */
+.mini-cart-panel .woocommerce-mini-cart {
+  max-height: 58vh;
+  overflow:auto;
+  margin: 0 0 12px;
+  padding-right: 6px; /* espacio para scroll */
+}
+.mini-cart-panel .woocommerce-mini-cart__total { 
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 10px;
+  margin-top: 8px;
+  font-weight: 600;
+}
+.mini-cart-panel .woocommerce-mini-cart__buttons .button {
+  display:inline-block;
+  margin-right:8px;
+  margin-top:10px;
+  border-radius: 999px; /* pastillas redondas */
+  padding:10px 16px;
+}
+
+/* Botones “pastilla” con tu morado */
+.mini-cart-panel .woocommerce-mini-cart__buttons .button.checkout {
+  background: #7C5CFF; /* tu morado */
+  color:#fff;
+}
+.mini-cart-panel .woocommerce-mini-cart__buttons .button:not(.checkout) {
+  background: transparent;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.20);
+}
+
+/* Imagen y texto más limpios */
+.mini-cart-panel .woocommerce-mini-cart li {
+  display:grid; grid-template-columns: 56px 1fr; column-gap:10px;
+  align-items:center;
+}
+.mini-cart-panel .woocommerce-mini-cart li img { border-radius:10px; }
+.mini-cart-panel .woocommerce-mini-cart .quantity { opacity:.85; }
+
+/* Mensaje vacío (una sola vez) */
+.mini-cart-panel p.empty + p.empty { display:none !important; }

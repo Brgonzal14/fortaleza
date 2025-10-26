@@ -16,50 +16,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  /* ---- Carrito ---- */
-  if (cartBtn && cartPanel) {
-    // Ancla el panel dentro del botón (queda justo debajo y alineado)
-    if (cartPanel.parentElement !== cartBtn) cartBtn.appendChild(cartPanel);
-    cartPanel.classList.add('cart-anchored');
+ /* ---- Carrito ---- */
+if (cartBtn && cartPanel) {
+  // el panel se queda donde está en el HTML (fuera del <button>)
+  cartPanel.classList.add('cart-anchored');
 
-    const openCart  = () => {
-      // cierra catálogo si estuviera abierto
-      closeIf(catPanel, catBtn);
-      cartPanel.hidden = false;
-      cartBtn.setAttribute('aria-expanded', 'true');
-    };
-    const closeCart = () => {
-      cartPanel.hidden = true;
-      cartBtn.setAttribute('aria-expanded', 'false');
-    };
-    const toggleCart = () => (cartPanel.hidden ? openCart() : closeCart());
+  const openCart  = () => {
+    // cierra catálogo si estuviera abierto (si la helper existe)
+    if (typeof closeIf === 'function') { try { closeIf(catPanel, catBtn); } catch(_){} }
+    cartPanel.hidden = false;
+    cartBtn.setAttribute('aria-expanded', 'true');
+  };
+  const closeCart = () => {
+    cartPanel.hidden = true;
+    cartBtn.setAttribute('aria-expanded', 'false');
+  };
+  const toggleCart = () => (cartPanel.hidden ? openCart() : closeCart());
 
-    cartBtn.addEventListener('click', (e) => {
-      e.stopPropagation(); // evita que el doc-listener cierre inmediatamente
-      toggleCart();
+  cartBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // evita que el doc-listener cierre inmediatamente
+    toggleCart();
+  });
+
+  // Cerrar al clicar fuera
+  document.addEventListener('click', (e) => {
+    if (!cartPanel.hidden && !cartPanel.contains(e.target) && !cartBtn.contains(e.target)) {
+      closeCart();
+    }
+  });
+
+  // Cerrar con ESC
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCart(); });
+
+  // --- Helpers ---
+  // Fallback para actualizar el badge sumando cantidades del mini-cart
+  const fallbackUpdateBadge = () => {
+    try {
+      const qtyEls = cartPanel.querySelectorAll('.woocommerce-mini-cart .quantity');
+      let total = 0;
+      qtyEls.forEach(q => {
+        // "2 × $15.000" -> 2
+        const m = q.textContent.match(/^\s*(\d+)/);
+        total += m ? parseInt(m[1], 10) : 1;
+      });
+      const badge = document.getElementById('cart-count');
+      if (badge && Number.isFinite(total)) badge.textContent = String(total);
+    } catch(_) {}
+  };
+
+  // --- Eventos WooCommerce (requiere jQuery, que Woo ya carga) ---
+  if (window.jQuery) {
+    const $ = window.jQuery;
+
+    // 1) Abrir el mini-carrito inmediatamente al agregar
+    $(document.body).on('added_to_cart', function () {
+      openCart();
     });
 
-    // Cerrar al clicar fuera
-    document.addEventListener('click', (e) => {
-      if (!cartPanel.hidden && !cartPanel.contains(e.target) && !cartBtn.contains(e.target)) {
-        closeCart();
+    // 2) Cuando Woo refresca fragments, nuestro PHP ya reemplaza:
+    //    - div.widget_shopping_cart_content (contenido)
+    //    - #cart-count (badge)   ← lo añadimos en functions.php
+    //    Si por algún motivo el fragment del badge no llegó, aplicamos fallback.
+    $(document.body).on('wc_fragments_refreshed wc_fragments_loaded', function () {
+      const badge = document.getElementById('cart-count');
+      const n = parseInt(badge ? badge.textContent : '', 10);
+      if (!badge || Number.isNaN(n)) {
+        fallbackUpdateBadge();
       }
     });
 
-    // Cerrar con ESC
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCart(); });
-
-    // Actualizar badge cuando Woo refresca el mini-cart vía AJAX
-    if (window.jQuery) {
-      jQuery(document.body).on('wc_fragments_refreshed', function(){
-        try {
-          const count = jQuery('.woocommerce-mini-cart li').length;
-          const badge = document.getElementById('cart-count');
-          if (badge) badge.textContent = count;
-        } catch(_) {}
-      });
-    }
+    // 3) Por si cambian cantidades desde mini-cart o cart (según plugins)
+    $(document.body).on('updated_cart_totals', function () {
+      fallbackUpdateBadge();
+    });
   }
+}
 
   /* ---- Catálogo ---- */
   if (catBtn && catPanel) {
