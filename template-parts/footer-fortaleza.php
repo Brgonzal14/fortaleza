@@ -76,6 +76,3 @@ if (!defined('ABSPATH')) exit;
   </div>
 </footer>
 
-<?php wp_footer(); ?>
-</body>
-</html>

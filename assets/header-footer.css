@@ -1940,3 +1940,12 @@ html, body {
 
 /* Mensaje vacío (una sola vez) */
 .mini-cart-panel p.empty + p.empty { display:none !important; }
+
+/* Desbloqueo por defecto */
+html, body { overflow-y: auto; }
+
+/* Bloqueo SOLO cuando el body/html tienen .lock-scroll */
+html.lock-scroll, body.lock-scroll { overflow: hidden; }
+
+/* Evita horizontales inesperados */
+html, body { overflow-x: hidden; }

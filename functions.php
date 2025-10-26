@@ -384,3 +384,51 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments){
   return $fragments;
 });
 
+/* === [fortaleza_search] -> Mensaje de “sin resultados” + recomendados === */
+add_shortcode('fortaleza_search', function () {
+  $q = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+  ob_start(); ?>
+  <section class="search-empty" style="padding:32px 0">
+    <div class="container" style="max-width:1240px;margin:0 auto;padding:0 16px">
+      <h1 style="margin:0 0 10px">
+        <?php echo $q ? 'No encontramos “'.esc_html($q).'”.' : 'No encontramos resultados.'; ?>
+      </h1>
+      <p style="opacity:.85;margin:0 0 20px">
+        Intenta con otras palabras o explora estas recomendaciones.
+      </p>
+      <?php if ( function_exists('get_product_search_form') ) { get_product_search_form(); } ?>
+
+      <h3 style="margin:24px 0 12px">Recomendados</h3>
+      <?php echo do_shortcode('[products limit="8" columns="4" orderby="rand"]'); ?>
+    </div>
+  </section>
+  <?php
+  return ob_get_clean();
+});
+
+/* === Forzar que TODA búsqueda del front sea de productos === */
+add_action('pre_get_posts', function ($q) {
+  if (is_admin() || !$q->is_main_query()) return;
+  if ($q->is_search()) {
+    $q->set('post_type', 'product'); // ¡clave!
+  }
+});
+
+/* === Si la búsqueda (ya de productos) NO tiene resultados -> redirige a /buscar/ === */
+add_action('template_redirect', function () {
+  if (is_admin()) return;
+
+  // Evita loop si ya estás en /buscar/
+  if (is_page() && get_queried_object() && get_queried_object()->post_name === 'buscar') return;
+
+  if (is_search()) {
+    global $wp_query;
+    if (isset($wp_query->found_posts) && (int) $wp_query->found_posts === 0) {
+      $q = urlencode(get_search_query());
+      wp_safe_redirect( home_url('/buscar/?s=' . $q) );
+      exit;
+    }
+  }
+});
+
+
