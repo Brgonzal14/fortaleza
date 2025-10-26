@@ -384,48 +384,51 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments){
   return $fragments;
 });
 
-/* === [fortaleza_search] -> Mensaje de “sin resultados” + recomendados === */
+/* === [fortaleza_search] -> bloque “sin resultados” + recomendados === */
 add_shortcode('fortaleza_search', function () {
   $q = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
   ob_start(); ?>
   <section class="search-empty" style="padding:32px 0">
     <div class="container" style="max-width:1240px;margin:0 auto;padding:0 16px">
-      <h1 style="margin:0 0 10px">
-        <?php echo $q ? 'No encontramos “'.esc_html($q).'”.' : 'No encontramos resultados.'; ?>
-      </h1>
-      <p style="opacity:.85;margin:0 0 20px">
-        Intenta con otras palabras o explora estas recomendaciones.
-      </p>
+      <h1 style="margin:0 0 10px"><?php echo $q ? 'No encontramos “'.esc_html($q).'”.' : 'No encontramos resultados.'; ?></h1>
+      <p style="opacity:.85;margin:0 0 20px">Intenta con otras palabras o explora estas recomendaciones.</p>
       <?php if ( function_exists('get_product_search_form') ) { get_product_search_form(); } ?>
-
       <h3 style="margin:24px 0 12px">Recomendados</h3>
       <?php echo do_shortcode('[products limit="8" columns="4" orderby="rand"]'); ?>
     </div>
   </section>
-  <?php
-  return ob_get_clean();
+  <?php return ob_get_clean();
 });
 
-/* === Forzar que TODA búsqueda del front sea de productos === */
+/* === Forzar que TODA búsqueda sea de productos === */
 add_action('pre_get_posts', function ($q) {
   if (is_admin() || !$q->is_main_query()) return;
-  if ($q->is_search()) {
-    $q->set('post_type', 'product'); // ¡clave!
-  }
+  if ($q->is_search()) { $q->set('post_type', 'product'); }
 });
 
-/* === Si la búsqueda (ya de productos) NO tiene resultados -> redirige a /buscar/ === */
+/* === Redirigir búsquedas sin resultados a la página “Buscar” (si existe),
+      con fallback seguro si no existe, o si hay multi-idioma/permalinks === */
 add_action('template_redirect', function () {
   if (is_admin()) return;
 
-  // Evita loop si ya estás en /buscar/
-  if (is_page() && get_queried_object() && get_queried_object()->post_name === 'buscar') return;
+  // Si ya estoy en /buscar/ no redirijo
+  $buscar_page = get_page_by_path('buscar'); // devuelve WP_Post o null
+  if ($buscar_page && is_page($buscar_page->ID)) return;
 
   if (is_search()) {
     global $wp_query;
-    if (isset($wp_query->found_posts) && (int) $wp_query->found_posts === 0) {
-      $q = urlencode(get_search_query());
-      wp_safe_redirect( home_url('/buscar/?s=' . $q) );
+    if ((int) $wp_query->found_posts === 0) {
+      $term = get_search_query();
+
+      if ($buscar_page instanceof WP_Post) {
+        // Usa el permalink real (soporta idiomas, estructuras personalizadas, etc.)
+        $dest = add_query_arg('s', rawurlencode($term), get_permalink($buscar_page->ID));
+      } else {
+        // Fallback SÓLIDO si la página no existe: manda a la home con query de producto
+        $dest = add_query_arg(['s' => $term, 'post_type' => 'product'], home_url('/'));
+      }
+
+      wp_safe_redirect($dest, 302);
       exit;
     }
   }
