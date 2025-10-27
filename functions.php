@@ -376,60 +376,67 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments){
   return $fragments;
 });
 
-/* === [fortaleza_search] -> Maneja resultados de búsqueda, no encontrados y recomendaciones === */
+/* === [fortaleza_search] – Resultados arriba, recomendados abajo (sin barra lateral ni “Buscar”) === */
 add_shortcode('fortaleza_search', function () {
-    $q = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+  $term  = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
+  $limit = 24;
+  $paged = max(1, (int) get_query_var('paged'), (int) get_query_var('page'));
 
-    ob_start(); ?>
-    <section class="search-results" style="padding:32px 0; background-color: #fff; color: #000;"> <!-- Fondo blanco temporal para visibilidad -->
-        <div class="container" style="max-width:1240px;margin:0 auto;padding:0 16px">
-            <?php echo 'DEBUG: Término de búsqueda = ' . esc_html($q); // Para verificar si $q llega ?> 
+  ob_start(); ?>
+  <section class="fort-search">
+    <div class="fort-search__container">
 
-            <?php if ($q) : ?>
-                <h1 style="margin:0 0 10px">Resultados para “<?php echo esc_html($q); ?>”</h1>
-            <?php else : ?>
-                <h1 style="margin:0 0 10px">Búsqueda</h1>
-            <?php endif; ?>
+      <header class="fort-search__head">
+        <?php if ($term !== ''): ?>
+          <h1>Resultados</h1>
+        <?php endif; ?>
+      </header>
 
-            <?php
-            // Query custom para productos
-            $args = [
-                'post_type'      => 'product',
-                'post_status'    => 'publish',
-                'posts_per_page' => 24,
-                's'              => $q,
-                'orderby'        => 'relevance',
-            ];
+      <?php
+      $have_results = false;
 
-            $search_query = new WP_Query($args);
-            echo 'DEBUG: Posts encontrados = ' . $search_query->found_posts; // Para verificar resultados
+      if ($term !== '') {
+        $args = [
+          'post_type'      => 'product',
+          'post_status'    => 'publish',
+          'posts_per_page' => $limit,
+          'paged'          => $paged,
+          's'              => $term,
+          'orderby'        => 'relevance',
+        ];
+        $q = new WP_Query($args);
 
-            if ($search_query->have_posts()) : ?>
-                <ul class="products columns-4">
-                    <?php while ($search_query->have_posts()) : $search_query->the_post(); ?>
-                        <?php wc_get_template_part('content', 'product'); ?>
-                    <?php endwhile; ?>
-                </ul>
-                <?php
-                // Paginación
-                the_posts_pagination([
-                    'prev_text' => __('Anterior', 'fortaleza'),
-                    'next_text' => __('Siguiente', 'fortaleza'),
-                ]);
-                ?>
-            <?php else : ?>
-                <h2 style="margin:0 0 10px"><?php echo $q ? 'No encontramos “'.esc_html($q).'”.' : 'No encontramos resultados.'; ?></h2>
-                <p style="opacity:.85;margin:0 0 20px">Intenta con otras palabras o explora estas recomendaciones.</p>
-            <?php endif; 
-            wp_reset_postdata(); ?>
+        if ($q->have_posts()) {
+          $have_results = true; ?>
+          <ul class="products columns-4 fort-search__results">
+            <?php while ($q->have_posts()) : $q->the_post(); ?>
+              <?php wc_get_template_part('content', 'product'); ?>
+            <?php endwhile; ?>
+          </ul>
+          <?php
+          echo paginate_links([
+            'total'   => (int) $q->max_num_pages,
+            'current' => $paged ?: 1,
+          ]);
+          wp_reset_postdata();
+        }
+      }
 
-            <?php if (function_exists('get_product_search_form')) { get_product_search_form(); } ?>
-
-            <h3 style="margin:24px 0 12px">Recomendados</h3>
-            <?php echo do_shortcode('[products limit="8" columns="4" orderby="rand"]'); ?>
+      if (!$have_results) : ?>
+        <div class="fort-search__empty">
+          <h2>No encontramos resultados.</h2>
+          <p>Intenta con otras palabras o explora estas recomendaciones.</p>
         </div>
-    </section>
-    <?php return ob_get_clean();
+      <?php endif; ?>
+
+      <section class="fort-search__reco">
+        <h3>Recomendados</h3>
+        <?php echo do_shortcode('[products limit="8" columns="4" orderby="rand"]'); ?>
+      </section>
+
+    </div>
+  </section>
+  <?php return ob_get_clean();
 });
 
 // Modificar el formulario de búsqueda de productos para que siempre apunte a /buscar/
@@ -494,4 +501,10 @@ add_action('pre_get_posts', function (\WP_Query $q) {
 add_filter('get_product_search_form', function ($form) {
     $form = preg_replace('/action="[^"]+"/', 'action="' . esc_url(home_url('/buscar/')) . '"', $form);
     return $form;
+});
+
+// Agrega una clase al body cuando estamos en /buscar/
+add_filter('body_class', function($classes){
+  if (is_page('buscar')) { $classes[] = 'fort-buscar'; }
+  return $classes;
 });
