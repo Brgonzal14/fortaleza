@@ -439,3 +439,59 @@ add_filter('get_product_search_form', function($form) {
     return $form;
 });
 
+/**
+ * ❶ Redirige cualquier búsqueda a /buscar/ manteniendo los parámetros (?s=..., etc.)
+ */
+add_action('template_redirect', function () {
+    if (is_admin() || !is_search()) return;
+
+    $page = get_page_by_path('buscar');
+    if (!$page) return;
+
+    // Destino = permalink de "Buscar" + query actual
+    $dest = add_query_arg($_GET, get_permalink($page->ID));
+
+    // Evita bucles si ya estamos en /buscar/
+    $req_path    = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+    $target_path = rtrim(parse_url($dest, PHP_URL_PATH), '/');
+
+    if ($req_path !== $target_path) {
+        nocache_headers();
+        wp_safe_redirect($dest, 302);
+        exit;
+    }
+});
+
+/**
+ * ❷ En /buscar/?s=..., convierte el main query en "la página Buscar"
+ *    (para que se renderice tu contenido + shortcode en vez de la plantilla de búsqueda).
+ */
+add_action('pre_get_posts', function (\WP_Query $q) {
+    if (is_admin() || !$q->is_main_query()) return;
+
+    $page = get_page_by_path('buscar');
+    if (!$page) return;
+
+    $req_path    = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+    $buscar_path = trim(parse_url(get_permalink($page->ID), PHP_URL_PATH), '/');
+
+    if ($req_path === $buscar_path) {
+        // Forzamos "query de página"
+        $q->set('post_type', 'page');
+        $q->set('page_id',   $page->ID);
+        $q->set('pagename',  get_page_uri($page->ID));
+        $q->set('s', '');            // neutraliza la búsqueda del main query
+        $q->is_search   = false;
+        $q->is_page     = true;
+        $q->is_singular = true;
+    }
+});
+
+/**
+ * ❸ Asegura que todos los formularios de búsqueda de productos apunten a /buscar/
+ *    (por si algún widget/plantilla usa el form de Woo).
+ */
+add_filter('get_product_search_form', function ($form) {
+    $form = preg_replace('/action="[^"]+"/', 'action="' . esc_url(home_url('/buscar/')) . '"', $form);
+    return $form;
+});
