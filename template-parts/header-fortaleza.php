@@ -112,7 +112,7 @@ $qs = isset($_GET['s']) ? wp_unslash($_GET['s']) : get_search_query();
 <form class="search"
       role="search"
       method="get"
-      action="<?php echo esc_url( home_url('/') ); ?>"
+      action="<?php echo esc_url( home_url('/buscar/') ); ?>"  
       aria-label="<?php echo esc_attr__( 'Buscar productos', 'fortaleza' ); ?>">
   <label for="site-search" class="screen-reader-text">
     <?php echo esc_html__( 'Buscar productos por nombre o SKU', 'fortaleza' ); ?>
@@ -228,4 +228,3 @@ $qs = isset($_GET['s']) ? wp_unslash($_GET['s']) : get_search_query();
   <?php if ( function_exists('woocommerce_mini_cart') ) woocommerce_mini_cart(); ?>
 </div>
 </header>
-
