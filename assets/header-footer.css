@@ -562,7 +562,7 @@
    ========================================================= */
 
 /* Contenedor centrado en 2 columnas (menú izq + contenido der) */
-.woocommerce-account .entry-content > .woocommerce{
+.woocommerce-account .entry-content .woocommerce{
   display: grid;
   grid-template-columns: minmax(240px, 300px) 1fr;
   gap: 22px;
@@ -606,7 +606,7 @@
 .woocommerce-account .woocommerce-MyAccount-content a{ color:var(--accent,#7c5cff); font-weight:700; text-decoration:none; }
 .woocommerce-account .woocommerce-MyAccount-content a:hover{ text-decoration:underline; }
 @media (max-width: 980px){
-  .woocommerce-account .entry-content > .woocommerce{ grid-template-columns: 1fr; }
+  .woocommerce-account .entry-content .woocommerce{ grid-template-columns: 1fr; }
   }
 
 /* Título “Mi cuenta” centrado y con aire */
@@ -646,7 +646,7 @@
 
 /* En móvil apilamos todo en una columna */
 @media (max-width: 980px){
-  .woocommerce-account .entry-content > .woocommerce{ grid-template-columns: 1fr; }
+  .woocommerce-account .entry-content .woocommerce{ grid-template-columns: 1fr; }
 }
 
 /* ================================
@@ -691,7 +691,7 @@
 }
 
 /* 4) Mantener el layout en 2 columnas pero SIN centrar visualmente el bloque */
-.woocommerce-account .entry-content > .woocommerce{
+.woocommerce-account .entry-content .woocommerce{
   display:grid;
   grid-template-columns: minmax(240px, 300px) 1fr;
   gap:22px;
@@ -2036,3 +2036,393 @@ html, body { overflow-x: hidden; }
 
 /* Por si alguna plantilla inyecta un formulario de búsqueda dentro de la sección */
 .fort-search .woocommerce-product-search { display: none !important; }
+
+/* ====== FIX: Mi Cuenta rota por reglas de centrado de Login/Registro ====== */
+
+/* 1) Cuando el usuario YA está logueado, quitamos el centrado global
+   que se usó para Login/Registro */
+body.logged-in.woocommerce-account .entry-content {
+  display: block !important;
+  justify-items: normal !important;
+}
+
+/* 2) El wrapper que Gutenberg usa para el shortcode no debe forzar centrado */
+body.logged-in.woocommerce-account .entry-content .wp-block-shortcode {
+  display: block !important;
+  width: auto !important;
+  justify-content: normal !important;
+  margin: 0 !important;
+}
+
+/* 3) Aseguramos nuestro layout en 2 columnas para Mi Cuenta (menú izq + contenido der) */
+body.logged-in.woocommerce-account .entry-content .woocommerce {
+  display: grid !important;
+  grid-template-columns: minmax(240px, 300px) 1fr !important;
+  gap: 22px !important;
+  align-items: start;
+  max-width: var(--container-max, 1240px);
+  margin: 24px auto 56px !important;  /* centrado del bloque completo */
+  padding: 0 var(--container-px, 16px);
+}
+
+/* 4) Links del menú con ancho completo (evita que el texto “baje” en vertical) */
+.woocommerce-MyAccount-navigation ul { display:flex; flex-direction:column; gap:10px; }
+.woocommerce-MyAccount-navigation li { margin:0 !important; }
+.woocommerce-MyAccount-navigation-link a {
+  display:block !important;
+  width:100% !important;
+  white-space: normal !important;   /* por si algún estilo los hacía estrechos */
+  overflow-wrap: anywhere;          /* rompe palabras largas sin apilar letras */
+}
+
+/* 5) Blindaje por si algún estilo externo activó escritura vertical */
+.woocommerce-MyAccount-navigation, 
+.woocommerce-MyAccount-navigation * {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+/* 6) Las reglas de centrado de Login/Registro SOLO deben aplicar a esas páginas.
+   (Usa los slugs reales: /ingresar/ y /registrarse/) */
+.page-ingresar .entry-content,
+.page-registrarse .entry-content {
+  display: flex !important;
+  justify-content: center !important;
+}
+.page-ingresar .entry-content .wp-block-shortcode,
+.page-registrarse .entry-content .wp-block-shortcode {
+  display:flex !important;
+  justify-content:center !important;
+  width:100% !important;
+}
+
+/* ===== MI CUENTA – layout consistente (nav izq + contenido der) ===== */
+
+/* Contenedor general: grid de 2 columnas */
+body.logged-in.woocommerce-account .entry-content .woocommerce{
+  display:grid !important;
+  grid-template-areas: "nav content";
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap:28px;
+  max-width: 1240px;
+  margin: 28px auto 72px !important;
+  padding: 0 16px;
+  align-items: start;
+}
+
+/* Asegurar que Woo nav y content ocupen su área correcta */
+body.logged-in.woocommerce-account .woocommerce-MyAccount-navigation{ grid-area: nav; }
+body.logged-in.woocommerce-account .woocommerce-MyAccount-content{ grid-area: content; }
+
+/* Quitar cualquier centrado heredado de login/registro */
+body.logged-in.woocommerce-account .entry-content,
+body.logged-in.woocommerce-account .entry-content .wp-block-shortcode{
+  display:block !important;
+  margin:0 !important; width:auto !important; justify-content:normal !important;
+  text-align:left !important;
+}
+
+/* ===== Menú lateral ===== */
+.woocommerce-MyAccount-navigation ul{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-direction:column; gap:12px;
+}
+.woocommerce-MyAccount-navigation li{ margin:0; }
+.woocommerce-MyAccount-navigation-link a{
+  display:block; width:100%;
+  padding:12px 16px; border-radius:999px;
+  white-space:normal; overflow-wrap:anywhere;
+}
+
+/* Estado activo del menú (ajusta a tu paleta si quieres) */
+.woocommerce-MyAccount-navigation .is-active a{
+  font-weight:700;
+}
+
+/* ===== Columna de contenido ===== */
+.woocommerce-MyAccount-content{
+  min-width:0;                 /* evita desbordes */
+}
+
+/* Títulos dentro de Mi Cuenta: vuelve a tamaños razonables */
+.woocommerce-account .woocommerce h1,
+.woocommerce-account .woocommerce h2,
+.woocommerce-account .woocommerce h3{
+  font-size: clamp(18px, 2.2vw, 22px) !important;
+  line-height:1.25 !important;
+  margin: 0 0 14px !important;
+}
+
+/* Tarjetas/boxes que tienes estiladas: que no se vayan demasiado angostas */
+.woocommerce-account .woocommerce .card,
+.woocommerce-account .woocommerce .woocommerce-orders-table,
+.woocommerce-account .woocommerce form{
+  max-width: 880px;            /* ancho cómodo de lectura */
+}
+
+/* ===== Página "Direcciones" en tarjetas responsivas ===== */
+.woocommerce-account .woocommerce-Addresses{
+  display:grid; gap:22px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.woocommerce-account .woocommerce-Address{
+  margin:0 !important;
+}
+
+/* Botones de acción dentro de Direcciones para que no “salten” */
+.woocommerce-account .woocommerce-Address .edit{
+  display:inline-flex; align-items:center; gap:8px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px){
+  body.logged-in.woocommerce-account .entry-content .woocommerce{
+    grid-template-areas:
+      "nav"
+      "content";
+    grid-template-columns: 1fr;
+    gap:20px;
+  }
+  .woocommerce-MyAccount-navigation ul{ flex-direction:row; flex-wrap:wrap; }
+  .woocommerce-MyAccount-navigation-link a{ border-radius:12px; }
+}
+
+/* ===== Fix definitivo menú Mi Cuenta (píldoras a la izquierda) ===== */
+.woocommerce-MyAccount-navigation,
+.woocommerce-MyAccount-navigation * {
+  writing-mode: horizontal-tb !important;   /* desactiva vertical */
+  text-orientation: mixed !important;
+  transform: none !important;                /* por si algún rotate quedó rondando */
+}
+
+/* Enlaces como píldoras, a lo ancho de la columna y sin romper letras */
+.woocommerce-MyAccount-navigation-link a {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  width: 100% !important;
+  min-width: 230px;           /* asegura que quepa el texto */
+  max-width: 100%;
+
+  min-height: 44px;
+  padding: 12px 16px;
+  text-align: left !important;
+
+  white-space: nowrap;        /* no partir palabras */
+  word-break: normal;
+  overflow-wrap: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;    /* si un texto es larguísimo, lo corta con … */
+}
+
+/* Asegura que la columna del nav no colapse */
+body.logged-in.woocommerce-account .woocommerce-MyAccount-navigation {
+  width: 100%;
+}
+
+/* En móviles convertimos a chips que pueden saltar de línea */
+@media (max-width: 980px){
+  .woocommerce-MyAccount-navigation ul {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .woocommerce-MyAccount-navigation-link a {
+    min-width: 0;           /* permite encoger en mobile */
+    white-space: normal;    /* ya puede romper en 2 líneas si es necesario */
+    text-overflow: clip;
+  }
+}
+
+/* ===== MINI-CARRITO: fix móvil (centrado y sin recortes) ===== */
+
+/* Desktop / tablets grandes: como estaba (anclado al botón, hacia la derecha) */
+.cart-btn .mini-cart-panel.cart-anchored {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: min(420px, 92vw);
+  background:#141416; color:#fff;
+  border-radius:16px; border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+  padding:16px; z-index:4000;
+  opacity:0; transform:translateY(-6px);
+  transition:opacity .16s ease, transform .16s ease;
+}
+.cart-btn .mini-cart-panel.cart-anchored:not([hidden]){ opacity:1; transform:translateY(0); pointer-events:auto; }
+.cart-btn .mini-cart-panel.cart-anchored::before{
+  content:""; position:absolute; top:-8px; right:18px; width:14px; height:14px;
+  background:#141416; transform:rotate(45deg);
+  border-left:1px solid rgba(255,255,255,.08); border-top:1px solid rgba(255,255,255,.08);
+}
+
+/* MÓVIL: abrir centrado bajo la barra, sin desbordes */
+@media (max-width: 768px){
+  /* el panel puede NO estar dentro del botón; cubrimos ambos casos */
+  .mini-cart-panel.cart-anchored{
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    top: calc(var(--navbar-h, 56px) + 8px) !important;
+    transform: translateX(-50%) !important;
+    width: min(94vw, 420px) !important;
+    margin: 0 !important;
+    z-index: 5000 !important;
+  }
+  .mini-cart-panel.cart-anchored::before{
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) rotate(45deg) !important;
+  }
+}
+
+/* ===== Checkout oscuro: mejora de contraste en "Precio final" ===== */
+
+/* Texto base de la tabla del resumen */
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table,
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table th,
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table td {
+  color: #E9E9F4 !important;            /* texto principal claro */
+}
+
+/* Fila de envío (label del método y texto auxiliar) */
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table .shipping td,
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table .shipping td *,
+.woocommerce ul#shipping_method li label {
+  color: #E9E9F4 !important;
+}
+
+/* Textos secundarios dentro del resumen (p.ej. "Cambiar dirección", ayudas, impuestos) */
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table tfoot small,
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table .includes_tax,
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table .fee,
+.woocommerce-checkout .woocommerce-checkout-review-order .shop_table .shipping small {
+  color: rgba(233,233,244,.78) !important; /* ligeramente más tenue pero legible */
+}
+
+/* Links del resumen (mantener tu morado y subrayado al pasar el mouse) */
+.woocommerce-checkout .woocommerce-checkout-review-order a {
+  color: #8B6CFF !important;
+  text-decoration: none;
+}
+.woocommerce-checkout .woocommerce-checkout-review-order a:hover {
+  text-decoration: underline;
+}
+
+/* Por si algún tema/plugin baja el contraste del radio/checkbox del método de envío */
+.woocommerce ul#shipping_method li input[type="radio"] + label {
+  color: #E9E9F4 !important;
+}
+
+/* ===== MI CUENTA → Direcciones: mantener el botón dentro de la tarjeta ===== */
+
+/* La tarjeta */
+.woocommerce-account .woocommerce-Address{
+  position: relative;
+}
+
+/* Encabezado + botón en una fila flexible (y sin floats) */
+.woocommerce-account .woocommerce-Address .woocommerce-Address-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:0 0 10px;
+}
+
+/* Título sin márgenes exagerados */
+.woocommerce-account .woocommerce-Address .woocommerce-Address-title h3{
+  margin:0; line-height:1.2;
+}
+
+/* El botón deja de flotar/posicionarse raro y se queda dentro */
+.woocommerce-account .woocommerce-Address .edit{
+  position:static !important;      /* por si algún tema lo posiciona */
+  float:none !important;           /* Woo por defecto lo flota */
+  margin-left:12px;
+  flex:0 0 auto;
+}
+
+/* Píldora morada segura dentro del ancho de la tarjeta */
+.woocommerce-account .woocommerce-Address .edit a{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:8px 14px; border-radius:999px;
+  max-width:100%; white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
+}
+
+/* Móvil: que el botón baje debajo del título y no se salga */
+@media (max-width: 768px){
+  .woocommerce-account .woocommerce-Address .woocommerce-Address-title{
+    flex-direction:column; align-items:flex-start; gap:8px;
+  }
+  .woocommerce-account .woocommerce-Address .edit{
+    margin:6px 0 0 0;
+  }
+  .woocommerce-account .woocommerce-Address .edit a{
+    max-width:100%;
+  }
+}
+
+/* ===== Header: normalizar alturas y alineación de CTA ===== */
+:root{
+  --hdr-btn-h: 44px;          /* alto objetivo de botones del header */
+}
+
+.header-actions, .topbar-actions, .nav-actions {
+  display:flex; align-items:center; gap:12px;
+}
+
+.header-actions .btn,
+.header-actions .cart-btn,
+.topbar-actions .btn,
+.topbar-actions .cart-btn,
+.nav-actions .btn,
+.nav-actions .cart-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: var(--hdr-btn-h);
+  line-height: var(--hdr-btn-h);
+  padding: 0 14px;
+}
+
+/* Badge del carrito siempre en la esquina superior derecha del botón */
+.cart-btn { position: relative; }
+.cart-btn .badge{
+  position:absolute; top:-7px; right:-7px;
+}
+
+/* ===== FIX específico: página Ver carrito ===== */
+body.woocommerce-cart .cart-btn{
+  /* anula cualquier desplazamiento que la plantilla del carrito le esté aplicando */
+  margin:0 !important;
+  top:auto !important;
+  transform:none !important;
+  translate: none !important;
+}
+
+/* por si algún tema cambia la línea base en esa vista */
+body.woocommerce-cart .header-actions .cart-btn,
+body.woocommerce-cart .topbar-actions .cart-btn,
+body.woocommerce-cart .nav-actions .cart-btn{
+  height: var(--hdr-btn-h) !important;
+  line-height: var(--hdr-btn-h) !important;
+  align-self:center !important;
+}
+
+/* Botón "Editar/Añadir Dirección" en Mi Cuenta: permitir 2 líneas en móvil */
+.woocommerce-account .woocommerce-Address .edit a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal;         /* <- permite saltos de línea */
+  line-height: 1.15;
+  max-width: 100%;
+}
+
+@media (max-width: 480px){
+  .woocommerce-account .woocommerce-Address .edit a{
+    font-size: 14px;
+    padding: 8px 12px;         /* un poco más compacto en móvil */
+  }
+}

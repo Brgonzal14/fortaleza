@@ -46,14 +46,14 @@ if (!defined('ABSPATH')) exit;
             +56 9 90904677</a></li>
           <li><a class="card-item" href="mailto:Hermandadmitera@gmail.com"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v1.2l10 6.25L22 7.2V6a2 2 0 0 0-2-2Zm0 5.4-8 5-8-5V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9.4Z"/></svg></span>
             Hermandadmitera@gmail.com</a></li>
-          <li><a class="card-item" href="https://maps.app.goo.gl/syvYatzEfKD9KZzB6" target="_blank"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.14 2 5 5.14 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg></span>
-            Av. Nueva Providencia 2212, local 204</a></li>
+         <!-- <li><a class="card-item" href="https://maps.app.goo.gl/syvYatzEfKD9KZzB6" target="_blank"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.14 2 5 5.14 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg></span>
+            Av. Nueva Providencia 2212, local 204</a></li> -->
         </ul>
       </div>
     </div>
 
     <!-- 3) Información -->
-    <div class="footer-col" data-section="info">
+   <!-- <div class="footer-col" data-section="info">
       <div class="footer-head">
         <button class="footer-toggle" aria-expanded="false" aria-controls="sec-info">
           <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41 8.58 12 13.17l4.59-4.59L18 10l-6 6-6-6z"/></svg>
@@ -69,10 +69,10 @@ if (!defined('ABSPATH')) exit;
         </ul>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="footer-bottom">
-    <p class="copy">© <?php echo esc_html( date('Y') ); ?> Tienda Mitos & Leyendas — Todos los derechos reservados.</p>
+    <p class="copy">© <?php echo esc_html( date('Y') ); ?> La fortaleza de la hermandad — Todos los derechos reservados.</p>
   </div>
 </footer>
 

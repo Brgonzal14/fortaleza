@@ -1,5 +1,6 @@
 // Fortaleza - JS global (limpio y unificado)
 document.addEventListener('DOMContentLoaded', () => {
+  
   /* =============== MINI CARRITO (anclado al botón) =============== */
   const cartBtn   = document.querySelector('.cart-btn');
   const cartPanel = document.getElementById('miniCartPanel');
@@ -173,6 +174,38 @@ document.addEventListener('DOMContentLoaded', () => {
     jQuery(document.body).on('added_to_cart wc_fragments_refreshed', scheduleHide);
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  // fuerza salto de línea antes de "facturación" o "envío"
+  const splitLastWord = (a) => {
+    if (!a || a.dataset.split === '1') return;
+    const txt = a.textContent.trim();
+    // palabras objetivo con acento (ajusta si cambias traducciones)
+    const targets = ['facturación', 'envío'];
+
+    for (const word of targets) {
+      const idx = txt.toLowerCase().lastIndexOf(word);
+      if (idx > 0) {
+        const first = txt.slice(0, idx).trim();
+        const last  = txt.slice(idx).trim();
+        a.innerHTML = `${first}<br>${last}`;
+        a.dataset.split = '1';               // evita duplicar
+        a.style.whiteSpace = 'normal';       // por si algún estilo lo evita
+        break;
+      }
+    }
+  };
+
+  // Aplica a los botones dentro de Direcciones (Añadir/Editar)
+  document.querySelectorAll('.woocommerce-Address .edit a').forEach(splitLastWord);
+
+  // Por si Woo actualiza dinámicamente (AJAX), observa cambios
+  const obs = new MutationObserver(() => {
+    document.querySelectorAll('.woocommerce-Address .edit a').forEach(splitLastWord);
+  });
+  obs.observe(document.body, { childList: true, subtree: true });
+});
+
 
 // Cantidad: botones +/– que sobreviven a los refrescos del carrito
 (function ($) {

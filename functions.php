@@ -508,3 +508,12 @@ add_filter('body_class', function($classes){
   if (is_page('buscar')) { $classes[] = 'fort-buscar'; }
   return $classes;
 });
+
+/**
+ * Cambiar el endpoint (pestaña) por defecto de "Mi Cuenta"
+ * ya que 'dashboard' fue eliminado del menú.
+ */
+add_filter('woocommerce_account_get_default_endpoint', function ($endpoint) {
+    // Redirige a 'orders' (Mis pedidos) que sí existe en tu menú.
+    return 'orders';
+}, 99, 1);
