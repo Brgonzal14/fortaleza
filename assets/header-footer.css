@@ -2426,3 +2426,193 @@ body.woocommerce-cart .nav-actions .cart-btn{
     padding: 8px 12px;         /* un poco más compacto en móvil */
   }
 }
+
+/* ===== WooCommerce: Thank you / Pay order en tema oscuro ===== */
+
+/* Limita a las páginas de recibido/pago */
+body.woocommerce-order-received,
+body.woocommerce-order-pay {
+  --card-bg: #141416;
+  --card-brd: rgba(255,255,255,.08);
+  --txt: #E9E9F4;
+}
+
+/* Títulos “Detalles del pedido”, “Dirección de facturación/envío”, etc. */
+body.woocommerce-order-received h2,
+body.woocommerce-order-pay h2,
+body.woocommerce-order-received .woocommerce-order-details__title,
+body.woocommerce-order-pay .woocommerce-order-details__title,
+body.woocommerce-order-received .woocommerce-column__title,
+body.woocommerce-order-pay .woocommerce-column__title {
+  background: var(--card-bg) !important;
+  color: #fff !important;
+  padding: 10px 16px !important;
+  border: 1px solid var(--card-brd) !important;
+  border-radius: 12px !important;
+  display: inline-block !important;
+  margin: 0 0 12px !important;
+}
+
+/* Tabla “Detalles del pedido” */
+body.woocommerce-order-received table.shop_table,
+body.woocommerce-order-pay table.shop_table {
+  background: var(--card-bg) !important;
+  color: var(--txt) !important;
+  border-color: var(--card-brd) !important;
+}
+body.woocommerce-order-received table.shop_table th,
+body.woocommerce-order-pay table.shop_table th,
+body.woocommerce-order-received table.shop_table td,
+body.woocommerce-order-pay table.shop_table td {
+  border-color: var(--card-brd) !important;
+  color: var(--txt) !important;
+}
+
+/* Columnas de “Dirección de facturación / envío” */
+body.woocommerce-order-received .woocommerce-customer-details .woocommerce-column,
+body.woocommerce-order-pay .woocommerce-customer-details .woocommerce-column {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-brd) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  color: var(--txt) !important;
+}
+
+/* Bloque de datos bancarios (BACS) */
+body.woocommerce-order-received .wc-bacs-bank-details,
+body.woocommerce-order-pay .wc-bacs-bank-details,
+body.woocommerce-order-received .woocommerce-bacs-bank-details,
+body.woocommerce-order-pay .woocommerce-bacs-bank-details {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--card-brd) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  color: var(--txt) !important;
+}
+
+/* Textos secundarios dentro de esos bloques */
+body.woocommerce-order-received .woocommerce-order,
+body.woocommerce-order-pay .woocommerce-order {
+  color: var(--txt) !important;
+}
+body.woocommerce-order-received .woocommerce-order a,
+body.woocommerce-order-pay .woocommerce-order a {
+  color: #8B6CFF !important;
+}
+
+/* ========= 1) MI CUENTA → “Mis pedidos”: que la tabla NO se salga del card ========= */
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-orders-table,
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders{
+  width: 100%;
+  background: #141416 !important;
+  color: #E9E9F4 !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 16px !important;
+  border-collapse: separate !important;   /* necesario para que respete el radius */
+  border-spacing: 0 !important;
+  overflow: hidden;                       /* ayuda en algunos navegadores */
+}
+
+/* Encabezados y celdas con buen contraste */
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders th{
+  background: #1b1c20 !important;
+  color: #E9E9F4 !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders td{
+  color: #E9E9F4 !important;
+  border-color: rgba(255,255,255,.08) !important;
+}
+
+/* Botón “Ver” alineado, sin desbordes */
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders .button{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 56px; height: 36px;
+  padding: 0 14px; border-radius: 999px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ========= 2) MI CUENTA → DETALLE DE PEDIDO (endpoint ver pedido) ========= */
+/* Aplica a la vista /mi-cuenta/view-order/… (algunos temas añaden la clase .woocommerce-view-order) */
+body.woocommerce-account.woocommerce-view-order {
+  --card-bg: #141416;
+  --card-brd: rgba(255,255,255,.08);
+  --txt: #E9E9F4;
+}
+
+/* Título “Detalles del pedido” */
+body.woocommerce-account.woocommerce-view-order .woocommerce-order-details__title{
+  display:inline-block;
+  background: var(--card-bg) !important;
+  color:#fff !important;
+  padding:10px 16px !important;
+  border:1px solid var(--card-brd) !important;
+  border-radius:12px !important;
+  margin:0 0 12px !important;
+}
+
+/* Tabla del detalle del pedido */
+body.woocommerce-account.woocommerce-view-order table.shop_table{
+  background: var(--card-bg) !important;
+  color: var(--txt) !important;
+  border:1px solid var(--card-brd) !important;
+  border-radius:16px !important;
+  border-collapse: separate !important;
+  border-spacing:0 !important;
+}
+body.woocommerce-account.woocommerce-view-order table.shop_table th{
+  background:#1b1c20 !important;
+  color: var(--txt) !important;
+  border-color: var(--card-brd) !important;
+}
+body.woocommerce-account.woocommerce-view-order table.shop_table td{
+  color: var(--txt) !important;
+  border-color: var(--card-brd) !important;
+}
+
+/* Bloques “Dirección de facturación / envío” dentro del detalle */
+body.woocommerce-account.woocommerce-view-order .woocommerce-customer-details .woocommerce-column{
+  background: var(--card-bg) !important;
+  color: var(--txt) !important;
+  border:1px solid var(--card-brd) !important;
+  border-radius:16px !important;
+  padding:16px !important;
+}
+body.woocommerce-account.woocommerce-view-order .woocommerce-customer-details .woocommerce-column__title{
+  background: var(--card-bg) !important;
+  color:#fff !important;
+  border:1px solid var(--card-brd) !important;
+  border-radius:12px !important;
+  padding:10px 16px !important;
+  display:inline-block !important;
+  margin:0 0 10px !important;
+}
+
+/* Textos auxiliares que aún pudieran quedar en gris/negro */
+body.woocommerce-account.woocommerce-view-order .woocommerce-order,
+body.woocommerce-account.woocommerce-view-order .woocommerce-order *{
+  color: var(--txt) !important;
+}
+body.woocommerce-account.woocommerce-view-order .woocommerce-order a{
+  color:#8B6CFF !important;
+}
+
+
+/* Mi cuenta → Ver pedido: texto superior en claro */
+body.woocommerce-account.woocommerce-view-order .woocommerce-order p,
+body.woocommerce-account.woocommerce-view-order .woocommerce-order p *,
+body.woocommerce-account.woocommerce-view-order .woocommerce-order .order-info,
+body.woocommerce-account.woocommerce-view-order .woocommerce-order .order-info *,
+body.woocommerce-account.woocommerce-view-order .woocommerce-order .woocommerce-order-overview,
+body.woocommerce-account.woocommerce-view-order .woocommerce-order .woocommerce-order-overview *{
+  color:#E9E9F4 !important;
+}
+
+/* Cualquier <mark> o estado que pudiera quedar oscuro */
+.woocommerce .order-status,
+.woocommerce mark, .woocommerce .mark{
+  background: transparent !important;
+  color:#E9E9F4 !important;
+}
+
+

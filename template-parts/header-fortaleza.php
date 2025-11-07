@@ -215,16 +215,10 @@ $qs = isset($_GET['s']) ? wp_unslash($_GET['s']) : get_search_query();
 
   <!-- Panel del mini-carrito (Woo lo refresca por AJAX) -->
   <div id="miniCartPanel" class="mini-cart-panel" hidden>
-    <div class="widget_shopping_cart_content">
-      <?php woocommerce_mini_cart(); ?>
-    </div>
+  <div class="widget_shopping_cart_content">
+    <?php woocommerce_mini_cart(); ?>
   </div>
+</div>
 </div>
 </nav>
 </div>
-
-<!-- Panel mini-carrito (tu JS lo ancla dentro del botón al cargar) -->
-<div id="miniCartPanel" class="mini-cart-panel" hidden>
-  <?php if ( function_exists('woocommerce_mini_cart') ) woocommerce_mini_cart(); ?>
-</div>
-</header>

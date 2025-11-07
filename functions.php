@@ -72,19 +72,6 @@ add_action('after_setup_theme', function () {
 //  (La mayoría de estas funciones son agnósticas al tema)
 // =======================================================
 
-// Fragment del carrito (badge)
-add_filter('woocommerce_add_to_cart_fragments', function ($fragments) {
-  ob_start(); ?>
-  <span class="badge" id="cart-count">
-    <?php echo (function_exists('WC') && WC()->cart) ? WC()->cart->get_cart_contents_count() : 0; ?>
-  </span>
-  <?php
-  $fragments['#cart-count'] = ob_get_clean();
-  return $fragments;
-});
-
-
-
 // Desactivar "Productos relacionados"
 add_action('init', function () {
   remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
@@ -363,18 +350,20 @@ add_filter('posts_search', function($search, \WP_Query $q){
  *  - Refresca el contenido y el badge
  *  ========================= */
 add_filter('woocommerce_add_to_cart_fragments', function($fragments){
-  // Contenido del mini-cart
+  // 1) Contenido del mini-cart (Woo imprime mensaje vacío cuando corresponde)
   ob_start();
   woocommerce_mini_cart();
   $fragments['div.widget_shopping_cart_content'] = ob_get_clean();
 
-  // Badge con el total de ítems
+  // 2) Badge del carrito (contador)
   ob_start();
-  echo (int) WC()->cart->get_cart_contents_count();
+  $count = ( function_exists('WC') && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+  echo '<span class="badge" id="cart-count">'. intval($count) .'</span>';
   $fragments['#cart-count'] = ob_get_clean();
 
   return $fragments;
 });
+
 
 /* === [fortaleza_search] – Resultados arriba, recomendados abajo (sin barra lateral ni “Buscar”) === */
 add_shortcode('fortaleza_search', function () {
