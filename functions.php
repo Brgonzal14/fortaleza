@@ -148,18 +148,43 @@ add_action('wp_enqueue_scripts', function () {
 
 // Shortcode [fortaleza_home_slider]
 add_shortcode('fortaleza_home_slider', function () {
-  // Tu código de shortcode aquí... (Lo he omitido por brevedad, pero mantenlo como estaba)
   ob_start(); ?>
   <section class="fort-carousel carousel" aria-roledescription="carousel" aria-label="Destacados">
     <div class="slides" id="slides">
+
+      <!-- Slide 1 -->
       <article class="slide is-active" aria-hidden="false" aria-live="polite">
-        <img src="https://i.imgur.com/0TEq5ty.jpeg" alt="Cuatro lobos emergiendo de una fortaleza" loading="eager" decoding="async">
+        <img
+          src="https://i.imgur.com/0TEq5ty.jpeg"
+          alt="Cuatro lobos emergiendo de una fortaleza"
+          loading="eager" decoding="async">
         <div class="slide-content center">
           <h2>Bienvenidos a la fortaleza</h2>
           <p>Atrévete a cruzar las puertas de la fortaleza.</p>
         </div>
       </article>
-      </div>
+
+      <!-- Slide 2 -->
+      <article class="slide" aria-hidden="true" aria-live="polite">
+        <img
+          src="https://i.imgur.com/nl8kzDC.jpeg"
+          alt="Arte del primer bloque — singles destacados"
+          loading="lazy" decoding="async">
+        <div class="slide-content center">
+          <h2>Singles Primer Bloque</h2>
+
+          <!-- BOTÓN -->
+          <a href="https://lafortalezahermandad.cl/categoria/mitos-y-leyendas/singles-primer-bloque/"
+            class="btn primary"
+            aria-label="Ver ahora">
+            Ver ahora
+          </a>
+        </div>
+</article>
+
+
+    </div>
+
     <button id="prevBtn" class="nav prev" type="button" aria-label="Slide anterior">‹</button>
     <button id="nextBtn" class="nav next" type="button" aria-label="Siguiente slide">›</button>
     <div id="dots" class="dots" role="tablist" aria-label="Paginación"></div>
@@ -167,6 +192,7 @@ add_shortcode('fortaleza_home_slider', function () {
   <?php
   return ob_get_clean();
 });
+
 
 
 // =======================================================

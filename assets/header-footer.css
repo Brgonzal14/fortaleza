@@ -2616,3 +2616,88 @@ body.woocommerce-account.woocommerce-view-order .woocommerce-order .woocommerce-
 }
 
 
+/* Si por error se imprimen dos mensajes seguidos, oculta el segundo */
+#miniCartPanel .woocommerce-mini-cart__empty-message + .woocommerce-mini-cart__empty-message{
+  display:none !important;
+}
+
+/* Mi cuenta → contenedor grande detrás de la tabla: quitarlo */
+.woocommerce-account .woocommerce-MyAccount-content{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;        /* evita que el fondo “asome” */
+}
+
+/* Mantén la tabla como la tarjeta principal */
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders{
+  width:100%;
+  background:#141416 !important;
+  color:#E9E9F4 !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  border-radius:16px !important;
+  border-collapse:separate !important;
+  border-spacing:0 !important;
+  overflow:hidden;
+}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders th{
+  background:#1b1c20 !important;
+  color:#E9E9F4 !important;
+  border-color:rgba(255,255,255,.08) !important;
+}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders td{
+  color:#E9E9F4 !important;
+  border-color:rgba(255,255,255,.08) !important;
+}
+
+/* Redondeos correctos en la 1ª y última fila */
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders thead th:first-child{border-top-left-radius:16px}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders thead th:last-child{border-top-right-radius:16px}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders tbody tr:last-child td:first-child{border-bottom-left-radius:16px}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders tbody tr:last-child td:last-child{border-bottom-right-radius:16px}
+
+/* Oculta “para X artículos” en la tabla de pedidos */
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders td.order-total small{
+  display:none !important;
+}
+
+/* Columna Acciones con ancho fijo y botón centrado */
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders th.order-actions,
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders td.order-actions{
+  width:120px; text-align:center;
+}
+.woocommerce-account .woocommerce-MyAccount-content .shop_table.my_account_orders td.order-actions .button{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:56px; height:36px; padding:0 14px; border-radius:999px;
+}
+
+/* Quitar la barra blanca del título en tarjetas de categorías */
+.woocommerce ul.products li.product.product-category .woocommerce-loop-category__title,
+.wc-block-grid__product-category .wc-block-grid__product-title {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  color: #E9E9F4 !important;          /* texto claro para tu tema oscuro */
+  border: 0 !important;
+}
+
+/* Por si el tema usa pseudo-elemento como fondo */
+.woocommerce ul.products li.product.product-category .woocommerce-loop-category__title::before,
+.wc-block-grid__product-category .wc-block-grid__product-title::before {
+  display: none !important;
+}
+
+/* (Opcional) Esconde el contador (x productos) si aparece */
+.woocommerce ul.products li.product.product-category .count {
+  display: none !important;
+}
+
+/* (Opcional) Si prefieres el título debajo de la imagen, no superpuesto */
+.woocommerce ul.products li.product.product-category .woocommerce-loop-category__title {
+  position: static !important;
+  transform: none !important;
+  padding: 8px 0 !important;
+  margin: 6px 0 0 !important;
+  text-align: center;
+}
+
