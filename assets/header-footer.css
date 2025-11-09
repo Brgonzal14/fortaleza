@@ -2701,3 +2701,43 @@ body.woocommerce-account.woocommerce-view-order .woocommerce-order .woocommerce-
   text-align: center;
 }
 
+/* Checkout (WooCommerce Blocks) — modo oscuro */
+
+/* Texto de los checkboxes, radios y labels en general */
+.wc-block-checkout,
+.wc-block-components {
+  --fort-txt: #fff;
+}
+
+.wc-block-components-checkbox__label,
+.wc-block-components-radio-control__label,
+.wc-block-components-text-input__label,
+.wc-block-components-address-form label,
+.wc-block-components-notice-banner__content {
+  color: var(--fort-txt) !important;
+}
+
+/* Placeholders y texto dentro de inputs/selects */
+.wc-block-components-text-input input,
+.wc-block-components-text-input select,
+.wc-block-components-text-input textarea {
+  color: #fff !important;
+  background: #141416 !important;
+  border-color: rgba(255,255,255,.25) !important;
+}
+
+.wc-block-components-text-input input::placeholder,
+.wc-block-components-text-input textarea::placeholder {
+  color: rgba(255,255,255,.7) !important;
+}
+
+/* Checkbox y radio: bordes visibles en oscuro */
+.wc-block-components-checkbox__input,
+.wc-block-components-radio-control__input {
+  border-color: rgba(255,255,255,.5) !important;
+}
+
+/* “Usar la misma dirección para facturación” (línea concreta) */
+.wc-block-components-checkbox .wc-block-components-checkbox__label {
+  color: #fff !important;
+}

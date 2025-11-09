@@ -532,3 +532,96 @@ add_filter('woocommerce_account_get_default_endpoint', function ($endpoint) {
     // Redirige a 'orders' (Mis pedidos) que sí existe en tu menú.
     return 'orders';
 }, 99, 1);
+
+// 🔹 Eliminar campo de código postal en el checkout (solo para Chile)
+add_filter('woocommerce_checkout_fields', function($fields){
+  unset($fields['billing']['billing_postcode']);
+  unset($fields['shipping']['shipping_postcode']);
+  return $fields;
+});
+
+// 🔹 No exigir el código postal como obligatorio
+add_filter('woocommerce_billing_fields', function($fields){
+  if (isset($fields['billing_postcode'])) {
+    $fields['billing_postcode']['required'] = false;
+  }
+  return $fields;
+});
+add_filter('woocommerce_shipping_fields', function($fields){
+  if (isset($fields['shipping_postcode'])) {
+    $fields['shipping_postcode']['required'] = false;
+  }
+  return $fields;
+});
+
+// 🔹 Forzar traducciones personalizadas del checkout
+add_filter('gettext', function($translated_text, $text, $domain) {
+
+  $replacements = [
+    'Billing details'     => 'Detalles de facturación',
+    'Shipping details'    => 'Detalles de envío',
+    'Place order'         => 'Realizar pedido',
+    'First name'          => 'Nombre',
+    'Last name'           => 'Apellido',
+    'Company name'        => 'Empresa (opcional)',
+    'Street address'      => 'Dirección',
+    'Town / City'         => 'Ciudad',
+    'State / County'      => 'Región / Provincia',
+    'Postcode / ZIP'      => 'Código postal',
+    'Phone'               => 'Teléfono',
+    'Email address'       => 'Correo electrónico',
+    'Your order'          => 'Tu pedido',
+    'Order notes'         => 'Notas del pedido',
+  ];
+
+  if (isset($replacements[$text])) {
+    return $replacements[$text];
+  }
+
+  return $translated_text;
+}, 999, 3);
+
+/* ====== Checkout: Chile sin Código Postal (Blocks + clásico) ====== */
+
+// 1) En Chile, el postcode NO es obligatorio y se oculta
+add_filter('woocommerce_get_country_locale', function($locale){
+  if (isset($locale['CL'])) {
+    $locale['CL']['postcode']['required'] = false;
+    $locale['CL']['postcode']['hidden']   = true;   // lo oculta en el formulario
+  }
+  return $locale;
+}, 20);
+
+// Fallback global por si algún plugin ignora el locale anterior
+add_filter('woocommerce_default_address_fields', function($fields){
+  if (isset($fields['postcode'])) {
+    $fields['postcode']['required'] = false;
+    $fields['postcode']['hidden']   = true;
+  }
+  // Cambiar label/placeholder de Address_2
+  if (isset($fields['address_2'])) {
+    $fields['address_2']['label']       = 'Departamento';
+    $fields['address_2']['placeholder'] = 'Departamento';
+  }
+  return $fields;
+}, 20);
+
+/* ====== Traducciones forzadas (Blocks) ====== */
+add_filter('gettext', function($translated, $text, $domain){
+
+  // Línea plegable encima de "address_2" en Woo Blocks
+  $map = [
+    'Add apartment, suite, unit, etc.' => 'Añadir departamento',
+    'Apartment, suite, unit, etc.'     => 'Departamento',
+    'Postcode / ZIP'                   => 'Código postal', // por si aparece en algún lugar
+  ];
+
+  if (isset($map[$text])) return $map[$text];
+  return $translated;
+}, 999, 3);
+
+/* Ocultar cualquier control de Código Postal en WooCommerce Blocks */
+.wc-block-components-address-form__postcode,
+.wc-block-components-address-form [name$="_postcode"] {
+  display: none !important;
+}
