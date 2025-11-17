@@ -726,3 +726,24 @@ function fortaleza_labels_address( $fields ) {
 
     return $fields;
 }
+
+/* =========================================================
+   FIX: Forzar etiqueta "País" (Solución definitiva)
+   Sobrescribe cualquier plugin que le esté poniendo "Región"
+   ========================================================= */
+add_filter( 'woocommerce_billing_fields', 'fortaleza_fix_country_label_final', 10000 );
+add_filter( 'woocommerce_shipping_fields', 'fortaleza_fix_country_label_final', 10000 );
+
+function fortaleza_fix_country_label_final( $fields ) {
+    // Corregir en Facturación
+    if ( isset( $fields['billing_country'] ) ) {
+        $fields['billing_country']['label'] = 'País';
+    }
+    
+    // Corregir en Envío
+    if ( isset( $fields['shipping_country'] ) ) {
+        $fields['shipping_country']['label'] = 'País';
+    }
+    
+    return $fields;
+}

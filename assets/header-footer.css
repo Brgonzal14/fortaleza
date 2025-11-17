@@ -3060,3 +3060,11 @@ body.woocommerce-cart .site-header .cart-btn {
   border-bottom: none !important;
   padding-bottom: 0 !important;
 }
+
+/* =========================================================
+   FIX: Ocultar título repetido en campo "Apartamento/Depto"
+   ========================================================= */
+#billing_address_2_field > label,
+#shipping_address_2_field > label {
+  display: none !important;
+}
