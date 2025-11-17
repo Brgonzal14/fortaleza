@@ -2910,3 +2910,46 @@ body.woocommerce-checkout .woocommerce-additional-fields label {
   object-fit: contain !important;    /* Muestra la imagen completa */
   margin-bottom: 8px !important;     /* Separa la imagen del título */
 }
+
+/* =========================================================
+   FIX: Reparar Header en página "Ver Carrito" (Móvil)
+   ========================================================= */
+
+/* 1. Asegurar que el contenedor de botones use Flexbox y no permita saltos de línea */
+body.woocommerce-cart .site-header .actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important; /* Obliga a todo a estar en una sola línea */
+  gap: 8px !important;
+  position: relative !important;
+}
+
+/* 2. Resetear el botón del carrito y su envoltorio para que no floten */
+body.woocommerce-cart .site-header .cart-wrap,
+body.woocommerce-cart .site-header .cart-btn {
+  position: relative !important; /* Anula el absolute que lo mueve */
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  height: 44px !important; /* Misma altura que los otros botones */
+  z-index: auto !important;
+}
+
+/* 3. Ordenar los elementos: Carrito -> Mi Cuenta -> Salir */
+/* Ajusta los números de 'order' si quieres cambiar la posición izquierda/derecha */
+@media (max-width: 768px) {
+  body.woocommerce-cart .site-header .actions .cart-wrap {
+    order: 1 !important; /* Carrito primero (izquierda del grupo) */
+  }
+  body.woocommerce-cart .site-header .actions .link {
+    order: 2 !important; /* Mi cuenta al medio */
+  }
+  body.woocommerce-cart .site-header .actions .btn {
+    order: 3 !important; /* Salir al final (derecha) */
+  }
+}
