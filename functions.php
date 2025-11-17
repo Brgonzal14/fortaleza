@@ -619,9 +619,3 @@ add_filter('gettext', function($translated, $text, $domain){
   if (isset($map[$text])) return $map[$text];
   return $translated;
 }, 999, 3);
-
-/* Ocultar cualquier control de Código Postal en WooCommerce Blocks */
-.wc-block-components-address-form__postcode,
-.wc-block-components-address-form [name$="_postcode"] {
-  display: none !important;
-}

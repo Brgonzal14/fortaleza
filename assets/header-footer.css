@@ -2741,3 +2741,69 @@ body.woocommerce-account.woocommerce-view-order .woocommerce-order .woocommerce-
 .wc-block-components-checkbox .wc-block-components-checkbox__label {
   color: #fff !important;
 }
+
+/* Mini-carrito: dejar solo un mensaje de "carrito vacío" */
+.mini-cart-panel .woocommerce-mini-cart__empty-message + .woocommerce-mini-cart__empty-message {
+  display: none;
+}
+
+/* --- Página de gracias / detalles del pedido --- */
+body.woocommerce-order-received .woocommerce-order,
+body.woocommerce-order-received .woocommerce-order-details,
+body.woocommerce-order-received .woocommerce-customer-details,
+body.woocommerce-order-received .woocommerce-columns--addresses .woocommerce-column {
+  background-color: #0b0b0c !important; /* mismo fondo de la web */
+  color: #ffffff !important;
+  border: 1px solid #2a2a2f;  /* opcional, para que se diferencie un poco */
+  box-shadow: none;
+}
+
+/* Quitar fondos blancos en los títulos de los bloques */
+body.woocommerce-order-received .woocommerce-order-details__title,
+body.woocommerce-order-received .woocommerce-column__title {
+  background: transparent !important;
+}
+
+/* Texto de los checkbox en el checkout (nota al pedido, usar misma dirección, etc.) */
+body.woocommerce-checkout .wc-block-components-checkbox__label,
+body.woocommerce-checkout .wc-block-components-checkbox__label span {
+  color: #ffffff !important;   /* texto blanco */
+  opacity: 1 !important;       /* quita el efecto de deshabilitado gris */
+}
+
+/* Por si WooCommerce usa <label> “normal” en la sección de notas */
+body.woocommerce-checkout .woocommerce-additional-fields label {
+  color: #ffffff !important;
+}
+
+/* Corregir aviso de error de login en móvil */
+@media (max-width: 768px) {
+  /* Contenedor de avisos en la página de Mi cuenta */
+  .woocommerce-account .woocommerce-notices-wrapper {
+    position: fixed !important;   /* o deja el que ya tengas, pero */
+    top: 90px !important;         /* ajusta según tu header */
+    left: 0 !important;
+    right: 0 !important;
+    width: auto !important;
+    padding: 0 14px;
+    transform: none !important;
+    box-sizing: border-box;
+    z-index: 9999;
+  }
+
+  .woocommerce-account .woocommerce-notices-wrapper
+  .woocommerce-error,
+  .woocommerce-account .woocommerce-notices-wrapper
+  .woocommerce-message,
+  .woocommerce-account .woocommerce-notices-wrapper
+  .woocommerce-info {
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+/* Ocultar cualquier control de Código Postal en WooCommerce Blocks */
+.wc-block-components-address-form__postcode,
+.wc-block-components-address-form [name$="_postcode"] {
+  display: none !important;
+}
