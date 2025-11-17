@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) exit;
           <li><a href="https://www.youtube.com/@HermandadMitera" target="_blank" class="card-item">
             <span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M10 15l5.19-3L10 9v6m12-3c0 1.77-.2 3.47-.56 5.11a2.5 2.5 0 0 1-1.75 1.75C17.05 19.8 14.73 20 12 20s-5.05-.2-7.69-.56a2.5 2.5 0 0 1-1.75-1.75C2.2 14.47 2 12.77 2 11s.2-3.47.56-5.11a2.5 2.5 0 0 1 1.75-1.75C6.95 3.2 9.27 3 12 3s5.05.2 7.69.56a2.5 2.5 0 0 1 1.75 1.75c.36 1.64.56 3.34.56 5.11z"/></svg></span>
             YouTube</a></li>
-          <li><a href="https://discord.gg/ggByg7fd" target="_blank" class="card-item">
+          <li><a href="https://discord.gg/XA2vjMpsD7" target="_blank" class="card-item">
             <span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M22 24l-5.25-4.75 1.25 4.75h-2.5l-1-3.75h-4.5l-1 3.75h-2.5l1.25-4.75L2 24l1.5-5.25C1.5 17 0 13.5 0 9.5 0 3.75 4.5 0 12 0s12 3.75 12 9.5c0 4-1.5 7.5-3.5 9.25L22 24z"/></svg></span>
             Discord</a></li>
         </ul>

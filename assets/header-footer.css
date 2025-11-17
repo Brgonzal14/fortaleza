@@ -3108,3 +3108,131 @@ body.woocommerce-cart .site-header .cart-btn {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+/* === Formulario Cotización de Mazos Fortaleza === */
+
+.fort-cotizador-wrap{
+  max-width: 780px;
+  margin: 2.5rem auto;
+  padding: 2rem 1.5rem;
+  background: rgba(0,0,0,0.85);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+  color: #f5f5f7;
+}
+
+.fort-cotizador-title{
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.fort-cotizador-intro{
+  margin-bottom: 1.5rem;
+  color: #f5f5f7;   /* antes más gris, ahora blanco */
+}
+
+.fort-cotizador-form{
+  display: grid;
+  gap: 1rem;
+}
+
+.fort-field label{
+  font-weight: 600;
+  display: block;
+  margin-bottom: .3rem;
+  color: #ffffff;   /* labels siempre en blanco */
+}
+
+.fort-field label span{
+  color: #ff6b6b;
+  margin-left: .15rem;
+}
+
+.fort-field input[type="text"],
+.fort-field input[type="email"],
+.fort-field select,
+.fort-field textarea{
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(20,20,26,0.95);
+  color: #f5f5f7;
+  padding: .7rem .9rem;
+  font-size: .96rem;
+}
+
+/* placeholder en blanco/gris clarito */
+.fort-field input[type="text"]::placeholder,
+.fort-field input[type="email"]::placeholder,
+.fort-field textarea::placeholder{
+  color: #e0e0ff;
+  opacity: 1; /* en algunos navegadores viene con menos opacidad */
+}
+
+/* select: texto claro y sin cortes */
+.fort-field select{
+  color: #f5f5f7;
+  text-transform: none;
+  font-size: .9rem;        /* un pelín más pequeño */
+  padding-right: 2.5rem;   /* deja espacio al ícono de la flecha para que no tape el texto */
+}
+
+.fort-field input[type="file"]{
+  color: #f5f5f7;
+  font-size: .9rem;
+}
+
+.fort-field small{
+  display: block;
+  margin-top: .25rem;
+  font-size: .8rem;
+  color: #b2b2c7;
+}
+
+.fort-btn-submit{
+  align-self: flex-start;
+  padding: .8rem 1.6rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  font-size: .98rem;
+  cursor: pointer;
+  background: #7c5cff;
+  color: #fff;
+  box-shadow: 0 14px 35px rgba(124,92,255,0.4);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+.fort-btn-submit:hover{
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 45px rgba(124,92,255,0.55);
+}
+
+/* mensajes */
+.fort-cotizador-msg{
+  padding: .8rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+}
+
+.fort-cotizador-msg.ok{
+  background: rgba(46, 204, 113, 0.18);
+  border: 1px solid rgba(46, 204, 113, 0.8);
+}
+
+.fort-cotizador-msg.error{
+  background: rgba(231, 76, 60, 0.18);
+  border: 1px solid rgba(231, 76, 60, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 600px){
+  .fort-cotizador-wrap{
+    margin: 1.5rem 1rem;
+    padding-inline: 1.25rem;
+  }
+}

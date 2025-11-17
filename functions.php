@@ -5,6 +5,12 @@
  */
 if (!defined('ABSPATH')) exit;
 
+/* === INCLUDES PERSONALIZADOS === */
+$fort_form_cotizador = get_stylesheet_directory() . '/form-cotizador.php';
+if ( file_exists( $fort_form_cotizador ) ) {
+  require_once $fort_form_cotizador;
+}
+
 // =======================================================
 //  1. ENCOLADO DE ESTILOS Y SCRIPTS (CORRECTO)
 // =======================================================
