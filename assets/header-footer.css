@@ -2807,3 +2807,59 @@ body.woocommerce-checkout .woocommerce-additional-fields label {
 .wc-block-components-address-form [name$="_postcode"] {
   display: none !important;
 }
+
+/* =========================================================
+   FIX MÓVIL: Título Arriba Centrado + Caja Abajo Centrada
+   ========================================================= */
+@media (max-width: 768px) {
+
+  /* 1. Contenedor flexible vertical */
+  body.woocommerce-account .entry-content,
+  body.woocommerce-account .woocommerce,
+  body.woocommerce-account #customer_login {
+    display: flex !important;
+    flex-direction: column !important; /* Apila elementos uno sobre otro */
+    align-items: center !important;    /* Centra horizontalmente */
+    width: 100% !important;
+  }
+
+  /* 2. El Título (Acceder / Registrarse) */
+  body.woocommerce-account h2, 
+  body.woocommerce-account .entry-title {
+    text-align: center !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+    margin-bottom: 30px !important; /* <--- ESTO da el espacio entre título y caja */
+    display: block !important;
+    order: -1 !important; /* Fuerza visualmente a ir primero arriba */
+  }
+
+  /* 3. La Caja del Formulario (Card) */
+  body.woocommerce-account form.woocommerce-form-login,
+  body.woocommerce-account form.woocommerce-form-register,
+  body.woocommerce-account .woocommerce form.login,
+  body.woocommerce-account .woocommerce form.register {
+    width: 92% !important;          /* Ancho cómodo en móvil */
+    max-width: 400px !important;    /* Que no se haga gigante */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 40px !important; /* Espacio abajo antes del footer */
+    
+    /* Aseguramos que no flote ni se vaya de lado */
+    float: none !important;
+    position: static !important;
+    transform: none !important;
+  }
+
+  /* 4. Forzar columnas internas a ocupar 100% y no dividir espacio */
+  body.woocommerce-account .u-columns, 
+  body.woocommerce-account .col2-set,
+  body.woocommerce-account .u-column1, 
+  body.woocommerce-account .u-column2 {
+    width: 100% !important;
+    float: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
