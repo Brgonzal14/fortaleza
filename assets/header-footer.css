@@ -3236,3 +3236,133 @@ body.woocommerce-cart .site-header .cart-btn {
     padding-inline: 1.25rem;
   }
 }
+
+/* ===========================
+   PANEL CATÁLOGO – ESTILO SUTIL
+   =========================== */
+
+.cat-panel{
+  min-width: 520px;
+  max-width: 720px;
+  padding: 1.1rem 1.4rem 1.3rem;
+  background: #0f0f13; /* fondo más sobrio */
+  border-radius: 18px;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.05);
+}
+
+/* GRID */
+.cat-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  column-gap: 2.4rem;
+  row-gap: .35rem;
+}
+
+/* TÍTULOS DE GRUPO */
+.cat-list .cat-root{
+  grid-column: 1 / -1;
+  margin-top: .9rem;
+  margin-bottom: .4rem;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #9ea0b8; /* más suave */
+  opacity: .9;
+}
+
+.cat-list .cat-root:first-child{
+  margin-top: .3rem;
+}
+
+/* ÍTEMS */
+.cat-list .cat-item{
+  padding: .12rem 0;
+}
+
+.cat-list .cat-item > a{
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .22rem .1rem;
+  border-radius: 8px;
+  font-size: .9rem;
+  color: #eaeaf2;
+  text-decoration: none;
+  transition: background .14s ease, transform .08s ease;
+}
+
+.cat-list .cat-item > a:hover{
+  background: rgba(255,255,255,.05); /* tenue */
+  transform: translateX(2px);
+}
+
+/* BOLITA SUAVE */
+.cat-list .cat-item > a::before{
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.3);
+}
+
+/* SUBCATS */
+.cat-list .subcats{
+  margin: .18rem 0 0 1rem;
+  padding: 0;
+}
+
+.cat-list .subcats a{
+  display: inline-block;
+  padding: .1rem 0;
+  font-size: .8rem;
+  color: #b9bbd1;
+}
+
+.cat-list .subcats a:hover{
+  color: #fff;
+}
+
+/* BOTÓN COTIZAR – versión discreta */
+.cat-list .cat-cotiza{
+  grid-column: 1 / -1;
+  margin-top: 1.2rem;
+}
+
+.cat-list .cat-cotiza a{
+  display: block;               /* ancho completo */
+  width: 100%;
+  text-align: center;
+  padding: .65rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(124,92,255,.6);
+  color: #cfc5ff;
+  background: rgba(124,92,255,.08);  /* sigue siendo suave */
+  font-size: .87rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background .15s ease, color .15s ease, border .15s ease;
+}
+
+
+/* Hover sobrio */
+.cat-list .cat-cotiza a:hover{
+  background: rgba(124,92,255,.16);
+  border-color: rgba(124,92,255,.9);
+  color: #fff;
+}
+
+/* Badge NUEVO – más minimalista */
+.cat-list .cat-cotiza a::after{
+  content: "nuevo";
+  text-transform: uppercase;
+  font-size: .63rem;
+  opacity: .7;
+  margin-left: .5rem;
+}

@@ -58,7 +58,7 @@ if ($roots) :
     // 2) Primer nivel: hijos del root
     $parents = get_terms([
       'taxonomy'   => 'product_cat',
-      'hide_empty' => true,          // muestra solo categorías con productos
+      'hide_empty' => true,
       'parent'     => (int) $root->term_id,
       'orderby'    => 'name',
       'order'      => 'ASC',
@@ -97,6 +97,15 @@ if ($roots) :
 else :
   echo '<li class="cat-item empty"><em>'. esc_html__('No hay categorías aún','fortaleza') .'</em></li>';
 endif;
+
+// 🔹 Enlace fijo a la página de cotización
+$cotiza_page = get_page_by_path( 'cotiza-tus-mazos-o-cartas' );
+if ( $cotiza_page ) {
+  $cotiza_url = get_permalink( $cotiza_page );
+  echo '<li class="cat-item cat-cotiza" role="none">';
+    echo '<a role="menuitem" href="'. esc_url( $cotiza_url ) .'">'. esc_html__( 'Cotiza tu mazo o las singles que te hacen falta', 'fortaleza' ) .'</a>';
+  echo '</li>';
+}
 ?>
 
           </ul>
