@@ -2953,3 +2953,39 @@ body.woocommerce-cart .site-header .cart-btn {
     order: 3 !important; /* Salir al final (derecha) */
   }
 }
+
+/* =========================================================
+   FIX: Mini-Carrito Móvil (Estilo Catálogo / Ancho Completo)
+   ========================================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Convertir la burbuja en un panel fijo centrado */
+  .cart-btn .mini-cart-panel,
+  .cart-wrap .mini-cart-panel,
+  .mini-cart-panel.cart-anchored,
+  #miniCartPanel {
+    position: fixed !important;
+    
+    /* Coordenadas para ocupar el ancho (igual que el Catálogo) */
+    top: calc(var(--navbar-h, 56px) + 10px) !important; /* Debajo del header */
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;      /* Se estira de izquierda a derecha */
+    max-width: none !important;  /* Elimina restricciones de ancho */
+    margin: 0 !important;
+    transform: none !important;  /* Elimina centrados antiguos */
+    
+    /* Estética y Scroll */
+    max-height: 80vh !important; /* Evita que se salga por abajo */
+    overflow-y: auto !important; /* Scroll si tienes muchos productos */
+    border-radius: 16px !important;
+    z-index: 99999 !important;   /* Asegura que flote sobre todo */
+  }
+
+  /* 2. Ocultar el triangulito superior (ya no apunta al botón) */
+  .cart-btn .mini-cart-panel::before,
+  .cart-wrap .mini-cart-panel::before,
+  .mini-cart-panel.cart-anchored::before {
+    display: none !important;
+  }
+}
