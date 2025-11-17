@@ -207,17 +207,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Cantidad: botones +/– que sobreviven a los refrescos del carrito
+// Cantidad: botones +/– con eliminación al llegar a cero y límite de stock
 (function ($) {
   if (!$('body').hasClass('woocommerce-cart')) return;
 
   function enhanceQty($scope) {
     $scope.find('td.product-quantity .quantity').each(function () {
       const $box = $(this);
-      if ($box.data('enhanced') === 1) return;       // evita duplicados
+      if ($box.data('enhanced') === 1) return; // Evita duplicados
 
       const $input = $box.find('.qty');
       if (!$input.length) return;
+
+      // 1. FIX: Si el input está oculto (stock 1), lo forzamos a ser texto visible
+      if ($input.attr('type') === 'hidden') {
+        $input.attr('type', 'text');
+        $input.prop('readonly', true);
+      }
 
       const $minus = $('<button type="button" class="qty-btn qty-minus" aria-label="Disminuir">–</button>');
       const $plus  = $('<button type="button" class="qty-btn qty-plus"  aria-label="Incrementar">+</button>');
@@ -226,23 +232,55 @@ document.addEventListener('DOMContentLoaded', () => {
       $plus.insertAfter($input);
       $box.data('enhanced', 1);
 
+      // Lectura de límites
       const step = parseFloat($input.attr('step')) || 1;
-      const min  = parseFloat($input.attr('min'));
-      const max  = parseFloat($input.attr('max'));
+      const min  = parseFloat($input.attr('min')); // Generalmente es 1
+      const max  = parseFloat($input.attr('max')); // Stock máximo
 
       const num = () => parseFloat(($input.val() + '').replace(',', '.')) || 0;
-      const clamp = (v) => {
-        if (!isNaN(min)) v = Math.max(min, v);
-        if (!isNaN(max) && max > 0) v = Math.min(max, v);
-        return v;
+
+      // Función mensaje Toast (Límite alcanzado)
+      const showLimitMsg = () => {
+        if ($('.fort-toast').length) return;
+        const msg = $('<div class="fort-toast">¡No puedes añadir más unidades de este producto!</div>');
+        $('body').append(msg);
+        setTimeout(() => msg.addClass('show'), 10);
+        setTimeout(() => {
+          msg.removeClass('show');
+          setTimeout(() => msg.remove(), 300);
+        }, 2500);
       };
 
+      // --- BOTÓN MENOS ---
       $minus.on('click', () => {
-        $input.val(clamp(num() - step)).trigger('input').trigger('change');
+        let val = num() - step;
+
+        // A) Si baja a 0 (o menos), eliminamos el ítem
+        if (val <= 0) {
+           // Buscamos el botón "X" (remove) en la misma fila y le hacemos click
+           const removeBtn = $box.closest('tr').find('a.remove');
+           if (removeBtn.length) {
+             removeBtn[0].click(); 
+             return; // Detenemos aquí para que Woo se encargue de borrar
+           }
+        }
+
+        // B) Si es mayor a 0, respetamos el mínimo (si fuera > 1) y actualizamos
+        if (!isNaN(min)) val = Math.max(min, val);
+        $input.val(val).trigger('input').trigger('change');
       });
 
+      // --- BOTÓN MÁS ---
       $plus.on('click', () => {
-        $input.val(clamp(num() + step)).trigger('input').trigger('change');
+        let val = num() + step;
+        
+        // Verificar Stock Máximo
+        if (!isNaN(max) && max > 0 && val > max) {
+           showLimitMsg();
+           return;
+        }
+        
+        $input.val(val).trigger('input').trigger('change');
       });
     });
   }
@@ -250,15 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Primera carga
   $(function () { enhanceQty($(document)); });
 
-  // Reinyectar tras cada refresco de WooCommerce
+  // Reinyectar tras cada refresco de WooCommerce (AJAX)
   $(document.body).on('updated_wc_div wc_fragments_loaded wc_fragments_refreshed', function () {
     enhanceQty($('.woocommerce'));
   });
-
-  // Extra: si otro script reemplaza nodos sin lanzar eventos, observa cambios
-  const target = document.querySelector('.woocommerce');
-  if (target) {
-    const mo = new MutationObserver(() => enhanceQty($(document)));
-    mo.observe(target, { childList: true, subtree: true });
-  }
 })(jQuery);

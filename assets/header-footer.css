@@ -3068,3 +3068,43 @@ body.woocommerce-cart .site-header .cart-btn {
 #shipping_address_2_field > label {
   display: none !important;
 }
+
+/* =========================================================
+   FIX: Inputs de cantidad readonly (Stock 1) + Aviso Toast
+   ========================================================= */
+
+/* 1. Forzar que el input readonly se vea igual al normal (blanco) */
+.woocommerce-cart .quantity input[readonly].qty {
+  background-color: #fff !important;
+  color: #000 !important;
+  opacity: 1 !important;
+  cursor: default;
+}
+
+/* 2. Estilo del mensaje flotante (Toast) */
+.fort-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background-color: #1f1f22; /* Fondo oscuro tipo tarjeta */
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  text-align: center;
+  width: max-content;
+  max-width: 90%;
+}
+
+.fort-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
