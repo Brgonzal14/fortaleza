@@ -619,3 +619,110 @@ add_filter('gettext', function($translated, $text, $domain){
   if (isset($map[$text])) return $map[$text];
   return $translated;
 }, 999, 3);
+
+/* ============================
+   Regiones / Provincias WooCommerce
+   Chile (CL) + Argentina (AR)
+============================= */
+add_filter( 'woocommerce_states', 'fortaleza_regiones_cl_ar' );
+function fortaleza_regiones_cl_ar( $states ) {
+
+    // ===== CHILE =====
+    $states['CL'] = array(
+        'RM'  => 'Región Metropolitana',
+        'I'   => 'Tarapacá',
+        'II'  => 'Antofagasta',
+        'III' => 'Atacama',
+        'IV'  => 'Coquimbo',
+        'V'   => 'Valparaíso',
+        'VI'  => 'O’Higgins',
+        'VII' => 'Maule',
+        'VIII'=> 'Biobío',
+        'IX'  => 'La Araucanía',
+        'X'   => 'Los Lagos',
+        'XI'  => 'Aysén',
+        'XII' => 'Magallanes',
+        'XIV' => 'Los Ríos',
+        'XV'  => 'Arica y Parinacota',
+        'XVI' => 'Ñuble',
+    );
+
+    // ===== ARGENTINA =====
+    // Códigos basados en ISO 3166-2:AR (los que usa Woo normalmente)
+    $states['AR'] = array(
+        'C' => 'Ciudad Autónoma de Buenos Aires',
+        'B' => 'Buenos Aires',
+        'K' => 'Catamarca',
+        'H' => 'Chaco',
+        'U' => 'Chubut',
+        'X' => 'Córdoba',
+        'W' => 'Corrientes',
+        'E' => 'Entre Ríos',
+        'P' => 'Formosa',
+        'Y' => 'Jujuy',
+        'L' => 'La Pampa',
+        'F' => 'La Rioja',
+        'M' => 'Mendoza',
+        'N' => 'Misiones',
+        'Q' => 'Neuquén',
+        'R' => 'Río Negro',
+        'A' => 'Salta',
+        'J' => 'San Juan',
+        'D' => 'San Luis',
+        'Z' => 'Santa Cruz',
+        'S' => 'Santa Fe',
+        'G' => 'Santiago del Estero',
+        'V' => 'Tierra del Fuego',
+        'T' => 'Tucumán',
+    );
+
+    return $states;
+}
+
+/* ============================
+   Desactivar Select2 (selectWoo)
+   para país / región
+============================= */
+add_action( 'wp_enqueue_scripts', function () {
+    // Woo usa este handle en versiones recientes
+    wp_dequeue_script( 'selectWoo' );
+    wp_deregister_script( 'selectWoo' );
+
+    // Algunos temas/plugins todavía usan estos nombres
+    wp_dequeue_style( 'select2' );
+    wp_deregister_style( 'select2' );
+    wp_dequeue_style( 'select2-css' );
+}, 100);
+
+add_action( 'wp_head', function () { ?>
+  <style>
+    .woocommerce-account select,
+    .woocommerce-checkout select {
+      pointer-events: auto !important;
+    }
+  </style>
+<?php });
+
+/* ============================
+ * Labels básicos de dirección
+ * - country  => "País"
+ * - state    => "Región"
+ * Se aplica a facturación y envío
+ * ============================ */
+add_filter( 'woocommerce_default_address_fields', 'fortaleza_labels_address', 30 );
+function fortaleza_labels_address( $fields ) {
+
+    // País
+    if ( isset( $fields['country'] ) ) {
+        $fields['country']['label']       = 'País';
+        $fields['country']['placeholder'] = 'Selecciona un país/región...';
+    }
+
+    // Región / Provincia
+    if ( isset( $fields['state'] ) ) {
+        $fields['state']['label']       = 'Región';
+        $fields['state']['placeholder'] = 'Elige una opción...';
+    }
+
+    return $fields;
+}
