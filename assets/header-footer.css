@@ -2863,3 +2863,9 @@ body.woocommerce-checkout .woocommerce-additional-fields label {
     align-items: center;
   }
 }
+
+/* Mini-carrito: ocultar mensaje de carrito vacío */
+#miniCartPanel .woocommerce-mini-cart__empty-message,
+#miniCartPanel p.empty {
+  display: none !important;
+}
