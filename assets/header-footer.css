@@ -3366,3 +3366,59 @@ body.woocommerce-cart .site-header .cart-btn {
   opacity: .7;
   margin-left: .5rem;
 }
+
+/* =========================================================
+   FIX DEFINITIVO: Menú Catálogo Móvil (Desbloqueo + Centrado)
+   ========================================================= */
+@media (max-width: 768px) {
+  
+  /* 1. ¡CLAVE! Liberar el botón para que el menú no se quede atrapado */
+  .catalog-trigger {
+    transform: none !important;  /* Desactiva el bloqueo */
+    position: static !important; /* Permite referenciar a la pantalla */
+  }
+
+  /* 2. Posicionar el menú respecto a la PANTALLA (no al botón) */
+  #catPanel, 
+  .cat-panel {
+    position: fixed !important;   
+    top: 70px !important;        /* Altura fija segura debajo del header */
+    left: 12px !important;       /* Margen izquierdo */
+    right: 12px !important;      /* Margen derecho */
+    width: auto !important;      /* Se estira de lado a lado */
+    
+    /* Reseteos de tamaño y scroll */
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: 80vh !important; /* Evita que se salga por abajo */
+    overflow-y: auto !important;
+    
+    /* Estética */
+    margin: 0 !important;
+    transform: none !important;
+    z-index: 99999 !important;
+    border-radius: 16px !important;
+    background: #0f0f13 !important; /* Asegurar fondo sólido */
+  }
+
+  /* 3. Organizar el contenido en una lista vertical limpia */
+  .cat-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Ajustes visuales de los ítems */
+  .cat-list .cat-item {
+    width: 100% !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05); /* Línea separadora sutil */
+  }
+
+  .cat-list .cat-cotiza {
+    width: 100% !important;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+  }
+}

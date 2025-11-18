@@ -347,10 +347,10 @@ add_action('wp_footer', function () {
 <?php });
 
 /** =========================
- *  BÚSQUEDA DE PRODUCTOS
- *  - Busca por título, descripción, extracto y SKU
- *  - Coincidencias parciales (LIKE)
- *  ========================= */
+ * BÚSQUEDA DE PRODUCTOS (MEJORADA: INSENSIBLE A TILDES)
+ * - Busca por título, descripción, extracto y SKU
+ * - Ignora tildes (ej: "limon" encuentra "limón" y viceversa)
+ * ========================= */
 add_filter('posts_search', function($search, \WP_Query $q){
   if (is_admin() || !$q->is_search()) return $search;
   if (!in_array($q->get('post_type'), ['product', 'any', null, false], true)) return $search;
@@ -359,21 +359,48 @@ add_filter('posts_search', function($search, \WP_Query $q){
   $s = trim($q->get('s'));
   if ($s === '') return $search;
 
-  $like = '%' . $wpdb->esc_like($s) . '%';
-  // Busca en título, contenido, extracto y SKU
+  // 1. Mapa de caracteres: vocales (con/sin tilde) -> Grupo Regex
+  // Esto hace que 'a' busque [aáà...], y 'á' también busque [aáà...]
+  $map = [
+      'a' => '[aáàäâ]', 'e' => '[eéèëê]', 'i' => '[iíìïî]', 'o' => '[oóòöô]', 'u' => '[uúùüû]', 'n' => '[nñ]',
+      'A' => '[aáàäâ]', 'E' => '[eéèëê]', 'I' => '[iíìïî]', 'O' => '[oóòöô]', 'U' => '[uúùüû]', 'N' => '[nñ]',
+      'á' => '[aáàäâ]', 'é' => '[eéèëê]', 'í' => '[iíìïî]', 'ó' => '[oóòöô]', 'ú' => '[uúùüû]', 'ñ' => '[nñ]',
+      'Á' => '[aáàäâ]', 'É' => '[eéèëê]', 'Í' => '[iíìïî]', 'Ó' => '[oóòöô]', 'Ú' => '[uúùüû]', 'Ñ' => '[nñ]'
+  ];
+
+  // 2. Construir el patrón Regex letra por letra
+  $s_clean = '';
+  $len = mb_strlen($s);
+  for ($i = 0; $i < $len; $i++) {
+      $char = mb_substr($s, $i, 1);
+      if (isset($map[$char])) {
+          $s_clean .= $map[$char]; // Reemplazo (ej: 'o' -> '[oóòöô]')
+      } else {
+          // Escapar caracteres especiales de Regex (., *, +, etc) para evitar errores
+          if (strpos('.*+?^$[]()|\\', $char) !== false) {
+              $s_clean .= '\\' . $char;
+          } else {
+              $s_clean .= $char;
+          }
+      }
+  }
+
+  // 3. Consulta SQL usando REGEXP
+  // (REGEXP ya busca coincidencias parciales, no necesita los %)
   $search  = $wpdb->prepare(
-    " AND ( {$wpdb->posts}.post_title   LIKE %s
-         OR {$wpdb->posts}.post_content LIKE %s
-         OR {$wpdb->posts}.post_excerpt LIKE %s
+    " AND ( {$wpdb->posts}.post_title   REGEXP %s
+         OR {$wpdb->posts}.post_content REGEXP %s
+         OR {$wpdb->posts}.post_excerpt REGEXP %s
          OR EXISTS (
               SELECT 1 FROM {$wpdb->postmeta} pm
               WHERE pm.post_id = {$wpdb->posts}.ID
                 AND pm.meta_key = '_sku'
-                AND pm.meta_value LIKE %s
+                AND pm.meta_value REGEXP %s
             )
         ) ",
-    $like, $like, $like, $like
+    $s_clean, $s_clean, $s_clean, $s_clean
   );
+  
   return $search;
 }, 20, 2);
 
@@ -752,4 +779,19 @@ function fortaleza_fix_country_label_final( $fields ) {
     }
     
     return $fields;
+}
+
+// Cambiar "Detalles de facturación" por "Detalles de envío" en el checkout
+add_filter( 'gettext', 'fortaleza_rename_billing_details_title', 20, 3 );
+function fortaleza_rename_billing_details_title( $translated, $text, $domain ) {
+
+    // Solo para WooCommerce y en la página de finalizar compra
+    if ( 'woocommerce' === $domain && is_checkout() ) {
+
+        if ( 'Detalles de facturación' === $translated ) {
+            $translated = 'Detalles de envío';
+        }
+    }
+
+    return $translated;
 }
