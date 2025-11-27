@@ -3475,3 +3475,26 @@ body.woocommerce-cart .site-header .cart-btn {
     bottom: 10px;
   }
 }
+
+
+/* Evitar que el mensaje de error mueva el formulario */
+.woocommerce form.login,
+.woocommerce-notices-wrapper {
+    margin: 0 auto !important;
+    max-width: 480px;
+}
+
+/* Mantener alineado el bloque del formulario */
+.woocommerce form.login {
+    padding-top: 10px;
+}
+
+/* Expandir página de restablecer contraseña en escritorio */
+.woocommerce-lost-password .woocommerce form {
+    max-width: 480px !important;
+    width: 100%;
+    margin: 40px auto;
+    padding: 30px;
+    background: #121212;
+    border-radius: 10px;
+}

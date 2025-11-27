@@ -797,3 +797,17 @@ function fortaleza_rename_billing_details_title( $translated, $text, $domain ) {
 }
 
 add_filter( 'big_image_size_threshold', '__return_false' );
+
+/* Desactivar por defecto "enviar a una dirección diferente" en el checkout */
+add_filter( 'woocommerce_shipping_address_enabled', '__return_false' );
+add_filter( 'woocommerce_ship_to_different_address_checked', '__return_false' );
+
+
+// Mover los avisos del login de WooCommerce debajo del formulario
+add_action( 'init', function() {
+    // Quita los avisos de arriba del formulario de login
+    remove_action( 'woocommerce_before_customer_login_form', 'woocommerce_output_all_notices', 10 );
+
+    // Los agrega debajo del formulario de login
+    add_action( 'woocommerce_after_customer_login_form', 'woocommerce_output_all_notices', 10 );
+} );
