@@ -180,7 +180,7 @@ add_shortcode('fortaleza_home_slider', function () {
           <h2>Singles Primer Bloque</h2>
 
           <!-- BOTÓN -->
-          <a href="https://lafortalezahermandad.cl/categoria/mitos-y-leyendas/singles-primer-bloque/"
+          <a href="https://lafortalezadelahermandad.com/categoria/mitos-y-leyendas/singles-primer-bloque/"
             class="btn primary"
             aria-label="Ver ahora">
             Ver ahora
