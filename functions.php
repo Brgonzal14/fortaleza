@@ -795,3 +795,5 @@ function fortaleza_rename_billing_details_title( $translated, $text, $domain ) {
 
     return $translated;
 }
+
+add_filter( 'big_image_size_threshold', '__return_false' );

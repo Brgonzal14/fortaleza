@@ -53,7 +53,7 @@ if (!defined('ABSPATH')) exit;
     </div>
 
     <!-- 3) Información -->
-   <!-- <div class="footer-col" data-section="info">
+   <div class="footer-col" data-section="info">
       <div class="footer-head">
         <button class="footer-toggle" aria-expanded="false" aria-controls="sec-info">
           <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41 8.58 12 13.17l4.59-4.59L18 10l-6 6-6-6z"/></svg>
@@ -62,14 +62,22 @@ if (!defined('ABSPATH')) exit;
       </div>
       <div id="sec-info" class="footer-panel" hidden>
         <ul class="info-list">
-          <li><a href="/terminos-y-condiciones" class="card-item"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg></span>
-            Términos y condiciones</a></li>
-          <li><a href="/contacto" class="card-item"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg></span>
-            Contacto</a></li>
+          <li>
+            <a href="<?php echo esc_url( home_url( '/informacion/' ) ); ?>" class="card-item">
+              <span class="ico-wrap">
+                <!-- puedes dejar aquí el ícono SVG que ya tenías, o vacío -->
+              </span>
+              Información de la tienda
+            </a>
+          </li>
+
+
+          <li><a href="/Terminos-y-condiciones" class="card-item"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg></span>
+            Terminos y condiciones</a></li>
         </ul>
       </div>
     </div>
-  </div> -->
+  </div> 
 
   <div class="footer-bottom">
     <p class="copy">© <?php echo esc_html( date('Y') ); ?> La fortaleza de la hermandad — Todos los derechos reservados.</p>
