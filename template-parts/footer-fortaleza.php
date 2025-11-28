@@ -65,20 +65,31 @@ if (!defined('ABSPATH')) exit;
           <li>
             <a href="<?php echo esc_url( home_url( '/informacion/' ) ); ?>" class="card-item">
               <span class="ico-wrap">
-                <!-- puedes dejar aquí el ícono SVG que ya tenías, o vacío -->
+                <svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
               </span>
               Información de la tienda
             </a>
           </li>
-
-
-          <li><a href="/Terminos-y-condiciones" class="card-item"><span class="ico-wrap"><svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg></span>
-            Terminos y condiciones</a></li>
+           <li>
+            <a href="<?php echo esc_url( home_url( '/terminos_condiciones/' ) ); ?>" class="card-item">
+              <span class="ico-wrap">
+                <svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              </span>
+              Terminos y condiciones
+            </a>
+          </li>
+           <li>
+            <a href="<?php echo esc_url( home_url( '/cambios_devoluciones/' ) ); ?>" class="card-item">
+              <span class="ico-wrap">
+                <svg class="ico" viewBox="0 0 24 24"><path fill="currentColor" d="M11 9h2v8h-2V9m1-7a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2m0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/></svg>
+              </span>
+              Cambios y devoluciones
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </div> 
-
   <div class="footer-bottom">
     <p class="copy">© <?php echo esc_html( date('Y') ); ?> La fortaleza de la hermandad — Todos los derechos reservados.</p>
   </div>

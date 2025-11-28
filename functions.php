@@ -802,12 +802,23 @@ add_filter( 'big_image_size_threshold', '__return_false' );
 add_filter( 'woocommerce_shipping_address_enabled', '__return_false' );
 add_filter( 'woocommerce_ship_to_different_address_checked', '__return_false' );
 
+function fortaleza_change_billing_details_heading( $translated_text, $text, $domain ) {
 
-// Mover los avisos del login de WooCommerce debajo del formulario
-add_action( 'init', function() {
-    // Quita los avisos de arriba del formulario de login
-    remove_action( 'woocommerce_before_customer_login_form', 'woocommerce_output_all_notices', 10 );
+    // Solo tocar textos de WooCommerce
+    if ( 'woocommerce' !== $domain ) {
+        return $translated_text;
+    }
 
-    // Los agrega debajo del formulario de login
-    add_action( 'woocommerce_after_customer_login_form', 'woocommerce_output_all_notices', 10 );
-} );
+    // Caso 1: texto original en inglés
+    if ( 'Billing details' === $text ) {
+        return 'Detalles del envío';
+    }
+
+    // Caso 2: texto ya traducido al español
+    if ( 'Detalles de facturación' === $translated_text ) {
+        return 'Detalles del envío';
+    }
+
+    return $translated_text;
+}
+add_filter( 'gettext', 'fortaleza_change_billing_details_heading', 20, 3 );

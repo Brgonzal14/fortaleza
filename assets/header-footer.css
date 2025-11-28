@@ -2776,32 +2776,6 @@ body.woocommerce-checkout .woocommerce-additional-fields label {
   color: #ffffff !important;
 }
 
-/* Corregir aviso de error de login en móvil */
-@media (max-width: 768px) {
-  /* Contenedor de avisos en la página de Mi cuenta */
-  .woocommerce-account .woocommerce-notices-wrapper {
-    position: fixed !important;   /* o deja el que ya tengas, pero */
-    top: 90px !important;         /* ajusta según tu header */
-    left: 0 !important;
-    right: 0 !important;
-    width: auto !important;
-    padding: 0 14px;
-    transform: none !important;
-    box-sizing: border-box;
-    z-index: 9999;
-  }
-
-  .woocommerce-account .woocommerce-notices-wrapper
-  .woocommerce-error,
-  .woocommerce-account .woocommerce-notices-wrapper
-  .woocommerce-message,
-  .woocommerce-account .woocommerce-notices-wrapper
-  .woocommerce-info {
-    margin: 0 auto;
-    width: 100%;
-  }
-}
-
 /* Ocultar cualquier control de Código Postal en WooCommerce Blocks */
 .wc-block-components-address-form__postcode,
 .wc-block-components-address-form [name$="_postcode"] {
@@ -3476,17 +3450,9 @@ body.woocommerce-cart .site-header .cart-btn {
   }
 }
 
-
-/* Evitar que el mensaje de error mueva el formulario */
-.woocommerce form.login,
-.woocommerce-notices-wrapper {
-    margin: 0 auto !important;
-    max-width: 480px;
-}
-
 /* Mantener alineado el bloque del formulario */
 .woocommerce form.login {
-    padding-top: 10px;
+    padding-top: 50px;
 }
 
 /* Expandir página de restablecer contraseña en escritorio */
