@@ -116,3 +116,95 @@
   .fort-carousel{ height: clamp(380px, 58vh, 520px); }
   .fort-carousel .slide-content{ bottom: clamp(32px, 10vh, 120px); }
 }
+
+/* Banner debajo del carrusel */
+.fort-home-banner {
+  width: 100%;
+  background: #0b0b0c; /* Mismo color de fondo de tu web */
+  line-height: 0;      /* Elimina espacios blancos debajo de la imagen */
+  display: block;
+  margin-bottom: 24px; /* Separación con el contenido siguiente */
+}
+
+.fort-home-banner img {
+  width: 100%;
+  height: auto;       /* Mantiene la proporción */
+  display: block;
+  object-fit: cover;  /* Asegura que cubra el espacio */
+}
+
+.fort-home-banner{
+  position:relative; /* necesario para posicionar el botón */
+}
+
+/* sombreado suave abajo para que el botón se lea siempre */
+.fort-home-banner::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:45%;
+  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+  pointer-events:none;
+}
+
+.fort-home-banner__cta{
+  position:absolute;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  z-index:2;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 20px;
+  border-radius:999px;
+
+  background: var(--accent, #7b61ff);
+  color:#fff;
+  font-weight:800;
+  text-decoration:none;
+
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 14px 28px rgba(0,0,0,.35);
+}
+
+.fort-home-banner__cta:hover{
+  transform:translateX(-50%) translateY(-1px);
+  filter:brightness(1.05);
+}
+
+.fort-home-banner__cta:focus-visible{
+  outline:3px solid rgba(255,255,255,.6);
+  outline-offset:3px;
+}
+
+/* =========================================
+   CORRECCIÓN PARA MÓVIL (Versión 2 - Alineado a la izquierda)
+   ========================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Botón compacto */
+  .fort-home-banner__cta {
+    padding: 6px 16px !important;
+    font-size: 13px !important;
+    bottom: 12px !important;
+    width: auto !important;
+  }
+
+  /* 2. Imagen con altura forzada pero alineada a la IZQUIERDA */
+  .fort-home-banner {
+    min-height: 140px;      /* Mantenemos la altura para que se vea el botón */
+    display: flex;
+  }
+
+  .fort-home-banner img {
+    height: 140px !important; 
+    object-fit: cover;        
+    object-position: left center;  /* <--- AQUÍ ESTÁ EL CAMBIO */
+  }
+  
+  .fort-home-banner::after {
+    height: 60%;
+  }
+}

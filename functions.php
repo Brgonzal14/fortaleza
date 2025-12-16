@@ -194,6 +194,22 @@ add_shortcode('fortaleza_home_slider', function () {
     <button id="prevBtn" class="nav prev" type="button" aria-label="Slide anterior">‹</button>
     <button id="nextBtn" class="nav next" type="button" aria-label="Siguiente slide">›</button>
     <div id="dots" class="dots" role="tablist" aria-label="Paginación"></div>
+    </section>
+
+  <section class="fort-home-banner">
+    <img 
+      src="https://lafortalezadelahermandad.com/wp-content/uploads/2025/12/zeromulligan.jpg" 
+      alt="Nueva Colección - Zero Mulligan"
+      width="1920" height="400"
+      loading="lazy"
+      decoding="async"
+    >
+    
+    <a class="fort-home-banner__cta"
+     href="https://lafortalezadelahermandad.com/categoria/accesorios/zeromulligan/"
+     aria-label="Ver productos Zero Mulligan">
+    Ver ahora
+    </a>
   </section>
   <?php
   return ob_get_clean();
