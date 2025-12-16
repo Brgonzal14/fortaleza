@@ -822,3 +822,149 @@ function fortaleza_change_billing_details_heading( $translated_text, $text, $dom
     return $translated_text;
 }
 add_filter( 'gettext', 'fortaleza_change_billing_details_heading', 20, 3 );
+
+// Asegurar que siempre exista billing_phone y que sea obligatorio
+add_filter( 'woocommerce_checkout_fields', function( $fields ) {
+
+    // Si existe el campo de teléfono de facturación, le cambiamos la etiqueta
+    if ( isset( $fields['billing']['billing_phone'] ) ) {
+        $fields['billing']['billing_phone']['label']   = 'Teléfono de contacto para el envío';
+        $fields['billing']['billing_phone']['required'] = true;
+    }
+
+    return $fields;
+}, 20 );
+
+// Copiar el teléfono visible al billing_phone si viene vacío
+add_action( 'woocommerce_checkout_process', function() {
+
+    // Si billing_phone viene vacío pero existe algún otro campo de teléfono, lo copiamos.
+    if ( empty( $_POST['billing_phone'] ) ) {
+
+        // Ejemplo: si tu plugin está usando shipping_phone
+        if ( ! empty( $_POST['shipping_phone'] ) ) {
+            $_POST['billing_phone'] = sanitize_text_field( $_POST['shipping_phone'] );
+        }
+
+        // Si usas otro nombre de campo, puedes replicar esto cambiando la clave:
+        // if ( ! empty( $_POST['mi_campo_telefono'] ) ) {
+        //     $_POST['billing_phone'] = sanitize_text_field( $_POST['mi_campo_telefono'] );
+        // }
+    }
+} );
+
+// Ocultar automáticamente los avisos de WooCommerce en Mi cuenta
+add_action( 'wp_footer', 'lfh_auto_hide_wc_notices' );
+function lfh_auto_hide_wc_notices() {
+
+    // Solo en la página de Mi cuenta (puedes quitar esto si lo quieres en todas)
+    if ( ! is_account_page() ) {
+        return;
+    }
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const wrapper = document.querySelector('.woocommerce-account .woocommerce-notices-wrapper');
+        if (!wrapper) return;
+
+        // Espera 6 segundos (6000 ms). Cambia a 8000 para 8 segundos si quieres.
+        setTimeout(function () {
+            wrapper.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            wrapper.style.opacity = '0';
+            wrapper.style.transform = 'translateY(-10px)';
+
+            // Después de la animación, lo ocultamos completamente
+            setTimeout(function () {
+                wrapper.style.display = 'none';
+            }, 700);
+        }, 6000); // <- aquí ajustas 6000 (6 s) o 8000 (8 s)
+    });
+    </script>
+    <?php
+}
+
+// Mover productos sin stock al final del catálogo
+// y ordenar del más caro al más barato
+add_filter( 'posts_clauses', 'ordenar_agotados_al_final', 2000, 2 );
+function ordenar_agotados_al_final( $clauses, $query ) {
+
+    // Solo en catálogo (tienda, categorías, etiquetas) y no en admin ni búsquedas
+    if ( ! is_admin()
+        && $query->is_main_query()
+        && ( is_shop() || is_product_category() || is_product_tag() )
+    ) {
+        global $wpdb;
+
+        // JOIN para estado de stock
+        $clauses['join'] .= "
+            LEFT JOIN {$wpdb->postmeta} AS stockstatus
+                ON {$wpdb->posts}.ID = stockstatus.post_id
+               AND stockstatus.meta_key = '_stock_status'
+        ";
+
+        // JOIN para el precio
+        $clauses['join'] .= "
+            LEFT JOIN {$wpdb->postmeta} AS price_meta
+                ON {$wpdb->posts}.ID = price_meta.post_id
+               AND price_meta.meta_key = '_price'
+        ";
+
+        // ORDER BY:
+        // 1) stockstatus: primero 'instock', luego 'outofstock'
+        // 2) precio: más caro -> más barato (DESC)
+        $clauses['orderby'] = "
+            stockstatus.meta_value ASC,
+            CAST(price_meta.meta_value AS DECIMAL(10,2)) DESC
+        ";
+    }
+
+    return $clauses;
+}
+
+/**
+ * Convertir pagos de PayPal de CLP a USD
+ * y evitar CURRENCY_NOT_SUPPORTED
+ *
+ * Asume que la tienda trabaja en CLP.
+ * Ajusta la tasa según el valor del dólar.
+ */
+add_filter( 'woocommerce_paypal_args', 'fortaleza_convertir_clp_a_usd_para_paypal', 20, 2 );
+
+function fortaleza_convertir_clp_a_usd_para_paypal( $args, $order ) {
+
+    // ***** AJUSTA ESTA TASA CUANDO CAMBIE EL DÓLAR *****
+    // 1 USD = 1000 CLP  ->  1 CLP = 0.001 USD
+    $clp_a_usd = 0.001;
+
+    // Forzar moneda USD para PayPal
+    $args['currency_code'] = 'USD';
+
+    // Campos de montos que normalmente van en la petición de PayPal
+    $campos_montos = array(
+        'amount',               // total del carrito (para pagos simples)
+        'shipping',             // envío
+        'handling_cart',        // cargos extra
+        'tax_cart',             // impuestos
+        'discount_amount_cart', // descuentos
+    );
+
+    foreach ( $campos_montos as $campo ) {
+        if ( isset( $args[ $campo ] ) && $args[ $campo ] !== '' ) {
+            $monto_clp           = floatval( $args[ $campo ] );
+            $monto_usd           = round( $monto_clp * $clp_a_usd, 2 ); // 2 decimales para USD
+            $args[ $campo ]      = $monto_usd;
+        }
+    }
+
+    // También convertir los ítems lineales (productos) si existen
+    // PayPal los envía como amount_1, amount_2, etc.
+    foreach ( $args as $key => $value ) {
+        if ( strpos( $key, 'amount_' ) === 0 ) {
+            $monto_clp      = floatval( $value );
+            $monto_usd      = round( $monto_clp * $clp_a_usd, 2 );
+            $args[ $key ]   = $monto_usd;
+        }
+    }
+
+    return $args;
+}

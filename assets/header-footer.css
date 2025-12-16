@@ -3463,4 +3463,33 @@ body.woocommerce-cart .site-header .cart-btn {
     padding: 30px;
     background: #121212;
     border-radius: 10px;
+    
+    
 }
+
+
+
+
+/* Centrar formulario de recuperar contraseña en pantallas pequeñas */
+@media (max-width: 768px) {
+
+  /* Contenedor general de WooCommerce en Mi cuenta */
+  body.woocommerce-account .woocommerce {
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  /* Formulario "¿Olvidaste tu contraseña?" */
+  body.woocommerce-account .woocommerce form.lost_reset_password {
+    max-width: 420px;      /* ancho máximo del formulario */
+    width: 100%;           /* que use todo el ancho posible */
+    margin: 0 auto;        /* centrado horizontal */
+  }
+
+  /* Por si algún contenedor interno tiene un margin raro */
+  body.woocommerce-account .woocommerce form.lost_reset_password p,
+  body.woocommerce-account .woocommerce form.lost_reset_password .form-row {
+    margin-left: 0;
+    margin-right: 0;
+  }

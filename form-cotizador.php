@@ -174,8 +174,12 @@ function fort_handle_cotizar_mazo_form() {
     }
   }
 
-  // Correo de destino (CAMBIA ESTO POR TU GMAIL)
-  $to = 'lahermandadmitera@gmail.com';
+    // Correos de destino: tienda + correo de empresa
+    $to = array(
+      'admin@lafortalezadelahermandad.cl',
+      'millennialsgames.spa@gmail.com',
+    );
+
 
   $headers = array(
     'Content-Type: text/plain; charset=UTF-8',
