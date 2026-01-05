@@ -208,3 +208,105 @@
     height: 60%;
   }
 }
+
+/* =========================================
+   SECCIÓN: COMUNIDADES Y TIENDAS AMIGAS
+   ========================================= */
+
+.lfh-amigos {
+  padding: 40px 0 60px;
+  background: #0b0b0c;
+}
+
+/* --- ESTILOS BASE (Móvil y Tablet) --- */
+/* En móvil, queremos que el título esté arriba y centrado */
+.lfh-amigos__header {
+  text-align: center;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.lfh-amigos__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 8px;
+  line-height: 1.1; /* Título más compacto */
+}
+
+.lfh-amigos__subtitle {
+  color: #a0a0b0;
+  font-size: 0.95rem;
+}
+
+.lfh-amigos__grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Tarjetas y Logos (Igual que antes) */
+.lfh-amigos__card {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  height: 100%;
+}
+.lfh-amigos__card:hover {
+  transform: translateY(-4px);
+  border-color: #7c5cff;
+}
+.lfh-amigos__logo {
+  width: 100%;
+  height: 70px; /* Un poco más pequeño para ganar espacio */
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.lfh-amigos__logo img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+.lfh-amigos__name {
+  font-size: 0.85rem; font-weight: 700; color: #f5f5f7; text-align: center;
+}
+
+/* --- ESTILOS DE ESCRITORIO (Aquí ocurre la magia) --- */
+@media (min-width: 1024px) {
+  
+  /* 1. Convertimos el contenedor en una fila flexible */
+  .lfh-amigos .ast-container {
+    display: flex;
+    align-items: center; /* Alineado verticalmente al centro */
+    gap: 40px;           /* Espacio entre el título y las tarjetas */
+  }
+
+  /* 2. El Título: Lo "apretamos" a la izquierda */
+  .lfh-amigos__header {
+    width: 220px;       /* Ancho fijo y estrecho para el título */
+    text-align: left;   /* Texto alineado a la izquierda */
+    margin-bottom: 0;   /* Quitamos el margen de abajo */
+    flex-shrink: 0;     /* Evita que se aplaste si falta espacio */
+  }
+  
+  .lfh-amigos__title {
+    font-size: 1.8rem;  /* Tamaño controlado */
+  }
+
+  /* 3. La Rejilla: Le damos todo el espacio restante para que destaque */
+  .lfh-amigos__grid {
+    flex-grow: 1;       /* Ocupa todo el ancho sobrante */
+    grid-template-columns: repeat(6, 1fr); /* Tus 6 columnas */
+  }
+}
