@@ -190,12 +190,12 @@ add_shortcode('fortaleza_home_slider', function () {
 
 
     </div>
-
+  
     <button id="prevBtn" class="nav prev" type="button" aria-label="Slide anterior">‹</button>
     <button id="nextBtn" class="nav next" type="button" aria-label="Siguiente slide">›</button>
     <div id="dots" class="dots" role="tablist" aria-label="Paginación"></div>
     </section>
-
+    
   <section class="fort-home-banner">
     <img 
       src="https://lafortalezadelahermandad.com/wp-content/uploads/2025/12/zeromulligan.jpg" 
@@ -983,4 +983,114 @@ function fortaleza_convertir_clp_a_usd_para_paypal( $args, $order ) {
     }
 
     return $args;
+}
+
+/* =======================================================
+ *  Checkout: RUT obligatorio (Chile)
+ *  - Agrega campo RUT en checkout
+ *  - En Chile (CL) es obligatorio y valida DV
+ *  - Guarda en el pedido y lo muestra en Admin + correos
+ * ======================================================= */
+
+// 1) Agregar campo RUT
+add_filter('woocommerce_checkout_fields', function ($fields) {
+
+  // Evitar redefinir si ya existe por otro plugin/snippet
+  if (!isset($fields['billing']['billing_rut'])) {
+    $fields['billing']['billing_rut'] = [
+      'type'        => 'text',
+      'label'       => 'RUT',
+      'placeholder' => 'Ej: 12.345.678-5',
+      'required'    => true, // lo hacemos obligatorio condicionalmente en la validación
+      'class'       => ['form-row-wide'],
+      'priority'    => 65,
+      'clear'       => true,
+    ];
+  }
+
+  return $fields;
+}, 30);
+
+// 2) Validación: en Chile es obligatorio + DV válido
+add_action('woocommerce_checkout_process', function () {
+
+  $country = isset($_POST['billing_country']) ? wc_clean($_POST['billing_country']) : '';
+  $rut_raw = isset($_POST['billing_rut']) ? wc_clean($_POST['billing_rut']) : '';
+
+  // Si algún día quieres pedir "Documento" a todos, pon true
+  // (pero ojo: la validación de DV solo corre si el país es Chile).
+  $require_for_all = false;
+
+  $is_required = $require_for_all || ($country === 'CL');
+
+  if ($is_required && empty($rut_raw)) {
+    wc_add_notice('Por favor ingresa tu RUT.', 'error');
+    return;
+  }
+
+  // Validar DV SOLO para Chile
+  if ($country === 'CL' && !empty($rut_raw)) {
+    if (!fortaleza_validar_rut($rut_raw)) {
+      wc_add_notice('El RUT ingresado no es válido. Ej: 12.345.678-5', 'error');
+    }
+  }
+});
+
+// 3) Guardar en meta del pedido
+add_action('woocommerce_checkout_update_order_meta', function ($order_id) {
+  if (isset($_POST['billing_rut'])) {
+    update_post_meta($order_id, '_billing_rut', wc_clean($_POST['billing_rut']));
+  }
+});
+
+// 4) Mostrar en el Admin del pedido
+add_action('woocommerce_admin_order_data_after_billing_address', function ($order) {
+  $rut = $order->get_meta('_billing_rut');
+  if ($rut) {
+    echo '<p><strong>RUT:</strong> ' . esc_html($rut) . '</p>';
+  }
+});
+
+// 5) (Opcional) Mostrar en correos
+add_filter('woocommerce_email_order_meta_fields', function ($fields, $sent_to_admin, $order) {
+  $rut = $order->get_meta('_billing_rut');
+  if ($rut) {
+    $fields['billing_rut'] = [
+      'label' => 'RUT',
+      'value' => $rut,
+    ];
+  }
+  return $fields;
+}, 10, 3);
+
+// --- Validador de RUT (Chile) ---
+if (!function_exists('fortaleza_validar_rut')) {
+  function fortaleza_validar_rut($rut) {
+    $rut = strtolower((string) $rut);
+    $rut = preg_replace('/[^0-9k]/', '', $rut);
+
+    if (strlen($rut) < 2) return false;
+
+    $dv  = substr($rut, -1);
+    $num = substr($rut, 0, -1);
+
+    if (!ctype_digit($num)) return false;
+
+    $factor = 2;
+    $sum = 0;
+
+    for ($i = strlen($num) - 1; $i >= 0; $i--) {
+      $sum += intval($num[$i]) * $factor;
+      $factor = ($factor === 7) ? 2 : $factor + 1;
+    }
+
+    $rest = $sum % 11;
+    $dv_calc = 11 - $rest;
+
+    if ($dv_calc === 11) $dv_calc = '0';
+    elseif ($dv_calc === 10) $dv_calc = 'k';
+    else $dv_calc = (string) $dv_calc;
+
+    return $dv === $dv_calc;
+  }
 }
