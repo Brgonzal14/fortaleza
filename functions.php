@@ -1094,3 +1094,104 @@ if (!function_exists('fortaleza_validar_rut')) {
     return $dv === $dv_calc;
   }
 }
+/**
+ * HOME: Comunidades y tiendas amigas (Astra Child)
+ * - 1 logo = 1 enlace
+ * - Solo en la página principal
+ */
+
+add_action('astra_primary_content_bottom', 'lfh_render_comunidades_amigas', 20);
+
+function lfh_render_comunidades_amigas() {
+  if ( ! is_front_page() ) return;
+
+  $base = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/amigos/';
+
+  $amigos = [
+    [
+      'name' => 'Coliseo Mitero',
+      'logo' => $base . 'coliseo-mitero.png',
+      'url'  => 'https://www.youtube.com/@coliseomitero',
+    ],
+    [
+      'name' => 'Dragon Dorado MYL',
+      'logo' => $base . 'dragon-dorado-myl.png',
+      'url'  => 'https://www.youtube.com/@DragonDoradoMyL/',
+    ],
+    [
+      'name' => 'Team Corvos',
+      'logo' => $base . 'team-corvos.png',
+      'url'  => 'https://www.instagram.com/team_corvos_myl/',
+    ],
+    [
+      'name' => 'Honnoto',
+      'logo' => $base . 'honnoto.png',
+      'url'  => 'https://www.instagram.com/honnoto.mangas/',
+    ],
+    [
+      'name' => 'Draco Argentino',
+      'logo' => $base . 'draco-argentino.png',
+      'url'  => 'https://www.instagram.com/teamdracoargentino/',
+    ],
+    [
+      'name' => 'Zero Mulligan',
+      'logo' => $base . 'zero-mulligan.png',
+      'url'  => 'https://www.zeromulligan.cl/',
+    ],
+  ];
+  ?>
+  <section class="lfh-amigos" aria-labelledby="lfh-amigos-title">
+    <div class="ast-container">
+      <header class="lfh-amigos__header">
+        <h2 id="lfh-amigos-title" class="lfh-amigos__title">Comunidades y tiendas amigas</h2>
+        <p class="lfh-amigos__subtitle">Visita sus redes y apoya la comunidad ❤️</p>
+      </header>
+
+      <div class="lfh-amigos__grid">
+        <?php foreach ( $amigos as $item ) :
+          $name = $item['name'] ?? '';
+          $logo = $item['logo'] ?? '';
+          $url  = $item['url']  ?? '';
+        ?>
+          <a class="lfh-amigos__card" href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener noreferrer">
+            <span class="lfh-amigos__logo">
+              <img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr($name); ?>" loading="lazy" decoding="async">
+            </span>
+            <span class="lfh-amigos__name"><?php echo esc_html($name); ?></span>
+          </a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+  <?php
+}
+
+add_action('wp_enqueue_scripts', function () {
+
+  $dir = get_stylesheet_directory();
+  $uri = get_stylesheet_directory_uri();
+
+  // header-footer.css
+  $hf_path = $dir . '/assets/header-footer.css';
+  if (file_exists($hf_path)) {
+    wp_enqueue_style(
+      'fortaleza-header-footer',
+      $uri . '/assets/header-footer.css',
+      [],
+      filemtime($hf_path)
+    );
+  }
+
+  // home-carousel.css (si lo estás usando)
+  $hc_path = $dir . '/assets/home-carousel.css';
+  if (file_exists($hc_path)) {
+    wp_enqueue_style(
+      'fortaleza-home-carousel',
+      $uri . '/assets/home-carousel.css',
+      ['fortaleza-header-footer'],
+      filemtime($hc_path)
+    );
+  }
+
+}, 20);
+
